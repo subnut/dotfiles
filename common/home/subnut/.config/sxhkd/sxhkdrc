@@ -20,7 +20,7 @@ super + {_,shift +}e
 
 # program launcher
 ctrl + space
-	dmenu_run &> /dev/null
+	~/.local/bin/dmenu_run &> /dev/null
 
 super + space
 	~/.config/rofi/launcher.sh &> /dev/null
