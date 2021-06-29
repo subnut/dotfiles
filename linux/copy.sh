@@ -10,4 +10,11 @@ cp -v  ~/.zprofile          home/subnut
 cp -rv ~/.local/bin/light   home/subnut/.local/bin
 cp -rv ~/.local/bin/battery home/subnut/.local/bin
 
+run() { echo "$*"; sh -c "$*"; }
+
+if test -x /usr/bin/pacman
+then
+  run 'pacman -Qenq > pacman_installed_packages'
+fi
+
 # vim: et ts=2 sts=0 sw=0:
