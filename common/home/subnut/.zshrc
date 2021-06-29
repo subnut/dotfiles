@@ -43,6 +43,9 @@ source ~/.zsh/key_mappings.zsh
 source ~/.zsh/prompt.zsh
 source ~/.fzf.zsh
 
+test -x ~/.local/bin/light \
+	&& alias light="doas ~/.local/bin/light"
+
 
 if [ ! -d ~/.zsh/OMZ_snippets ]
 then

@@ -1,10 +1,13 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
+test -d root/etc                || mkdir -p root/etc
 test -d home/subnut             || mkdir -p home/subnut
 test -d home/subnut/.zsh        || mkdir -p home/subnut/.zsh
 test -d home/subnut/.config     || mkdir -p home/subnut/.config
 test -d home/subnut/.local/bin  || mkdir -p home/subnut/.local/bin
+
+cp -v /etc/doas.conf        root/etc
 
 cp -v ~/.Xdefaults          home/subnut
 cp -v ~/.xinitrc            home/subnut
