@@ -1,12 +1,18 @@
 #!/bin/sh
 if test $# -eq 0
 then
-	echo No brightness specified >&2
-	exit 1
+	for dev in /sys/class/backlight/*
+	do
+		echo "${dev#/sys/class/backlight/}: $(cat $dev/brightness)"
+	done
+	exit 0
 fi
-if ! echo "$1" | grep -q '^[+-]\{0,1\}[[:digit:]]*$'
-then
+if echo "$1" | grep -q '^[+-][[:digit:]]*$' \
+	|| (echo "$1" | grep -q '^[[:digit:]]*$' && test "$1" -ge 0 && test "$1" -le 255)
+then :
+else
 	echo Invalid brightness >&2
+	echo "Usage: $0 [[+|-]brightness]"
 	exit 1
 fi
 case "$1" in
@@ -24,5 +30,7 @@ do
 	then target=$(( $(cat $dev/brightness) $operand ${1#$operand} ))
 	else target=$1
 	fi
+	test $target -lt 0   && target=0
+	test $target -gt 255 && target=255
 	echo $target > "$dev/brightness"
 done
