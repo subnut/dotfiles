@@ -1,0 +1,3 @@
+Use copy.sh  to copy  dotfiles from $HOME to repo.
+
+Use paste.sh to paste dotfiles from repo to $HOME.
