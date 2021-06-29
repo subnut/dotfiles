@@ -1,0 +1,13 @@
+#!/bin/sh
+
+## Hardcoded path to mpv executable -
+# /usr/local/bin/mpv "$@"
+
+## Dynamically-selected path to mpv executable -
+#	- get all "mpv" executables in $PATH
+#	- filter out the entries that refer to this script
+#	- select the first entry out of the remaining entries
+"$(which -a mpv | grep -v "^$(dirname "$0")/$(basename "$0")" | head -n 1)" "$@"
+
+## Cleanup
+rm -f mpv.core
