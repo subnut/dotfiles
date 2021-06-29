@@ -11,6 +11,9 @@ then
 echo '==== Linux files ===='
 ./linux/paste.sh
 echo
+echo 'If alsa shows error "unable to open slave", then'
+echo '	cp etc_modprobe.d_alsa.conf /etc/modprobe.d/alsa.conf'
+echo
 fi
 
 if [ $(uname) = OpenBSD ]
