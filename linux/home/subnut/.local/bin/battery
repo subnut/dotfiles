@@ -1,0 +1,9 @@
+#!/bin/sh
+for BAT in /sys/class/power_supply/BAT*
+do
+	mins=$(( $(cat $BAT/energy_now) * 60 / $(cat $BAT/power_now) ))
+	hour=$(( mins / 60 ))
+	mins=$(( mins % 60 ))
+	percent=$(( $(cat $BAT/energy_now) * 100 / $(cat $BAT/energy_full) ))
+	printf '%s: %d%% (%02d:%02d)\n' ${BAT#/sys/class/power_supply/} $percent $hour $mins
+done
