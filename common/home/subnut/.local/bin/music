@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# We first cd into /tmp so that, if $MUSIC_EXEC dumps core, then it doesn't
+# stay in the current dir, but is wiped out along with /tmp
+cd /tmp
+
+if test -z "$MUSIC_DIR"
+then export MUSIC_DIR="/mnt/d/Deezloader Music/"
+fi
+
+if test -z "$MUSIC_EXEC"
+# then export MUSIC_EXEC="ffplay -v error"
+then export MUSIC_EXEC=mpv
+fi
+
+if test -n "$DIRS_ONLY" && test "$DIRS_ONLY" -eq 1
+then export DIRS_ONLY="-type d"
+else export DIRS_ONLY=
+fi
+
+if test ! -d "$MUSIC_DIR"
+then echo "directory \"$MUSIC_DIR\" does not exist"; exit 1
+fi
+
+find "$MUSIC_DIR" '(' -path "*${*}*" -or -iname "*${*}*" ')' $DIRS_ONLY
+echo -n 'Play? [Y/n] ' >&2
+read ANSWER
+
+if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'
+then exec \
+find "$MUSIC_DIR" '(' -path "*${*}*" -or -iname "*${*}*" ')' $DIRS_ONLY -exec $MUSIC_EXEC {} +
+fi

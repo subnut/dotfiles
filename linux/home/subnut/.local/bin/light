@@ -1,0 +1,28 @@
+#!/bin/sh
+if test $# -eq 0
+then
+	echo No brightness specified >&2
+	exit 1
+fi
+if ! echo "$1" | grep -q '^[+-][[:digit:]]*$'
+then
+	echo Invalid brightness >&2
+	exit 1
+fi
+case "$1" in
+	(+*) operand=+ ;;
+	(-*) operand=- ;;
+	( *) operand=  ;;
+esac
+for dev in /sys/class/backlight/*
+do
+	if ! test -w "$dev/brightness"; then
+		echo "$dev/brightness not writable" >&2
+		continue
+	fi
+	if test -n "$operand"
+	then target=$(( $(cat $dev/brightness) $operand ${1#$operand} ))
+	else target=$1
+	fi
+	echo $target > "$dev/brightness"
+done
