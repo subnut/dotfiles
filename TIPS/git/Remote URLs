@@ -1,0 +1,13 @@
+SSH URLs
+--------
+Codeberg:
+git remote add codeberg "git@codeberg.org:subnut/$(basename $(git rev-parse --show-toplevel)).git"
+
+GitHub:
+git remote add github "git@github.com:subnut/$(basename $(git rev-parse --show-toplevel)).git"
+
+GitHub-origin:
+git remote set-url --push origin "git@github.com:subnut/$(basename $(git rev-parse --show-toplevel)).git"
+
+
+vim:et nowrap:
