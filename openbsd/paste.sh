@@ -1,7 +1,16 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
-pkg_add -l openbsd_pkg_list || exit $?
+errexit()
+{
+  EXITCODE=$1
+  shift
+  echo
+  echo "$*" >&2
+  exit $EXITCODE
+}
+
+pkg_add -l openbsd_pkg_list || errexit $? Run "\"$0\"" as root
 cp -rv root/etc /
 
 X=home/subnut/.local/bin
