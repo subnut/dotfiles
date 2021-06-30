@@ -11,6 +11,7 @@ then
 echo '==== Linux files ===='
 ./linux/paste.sh
 echo
+echo '###### ALSA note ######'
 echo 'If alsa shows error "unable to open slave", then'
 echo "	cp $(pwd)/etc_modprobe.d_alsa.conf /etc/modprobe.d/alsa.conf"
 echo

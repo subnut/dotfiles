@@ -14,6 +14,18 @@ then
   run cd yay-bin '&&' makepkg -si $PACFLAGS
   run rm -rf yay-bin
   run yay -S $PACFLAGS '$(cat AUR_installed_packages)'
+  echo
+  echo "###### XORG note ######"
+  echo "You don't need dbus or elogind. Uninstall them NOW!"
+  echo "Xorg can run perfectly fine without elogind. Use Xorg.wrap"
+  echo
+  echo "First, ensure that /usr/lib/Xorg.wrap is owned by root"
+  echo "Then, run the following command AS ROOT to make it setuid-root -"
+  echo "    chmod u+s /usr/lib/Xorg.wrap"
+  echo
+  echo "By default /usr/bin/Xorg should be a shell script that simply executes"
+  echo "/usr/lib/Xorg.wrap if available, else /usr/lib/Xorg (the actual Xserver)"
+  echo
 fi
 
 # vim: et ts=2 sts=0 sw=0:
