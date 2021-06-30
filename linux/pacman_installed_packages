@@ -34,6 +34,7 @@ ntfs-3g
 opendoas
 openssh
 os-prober
+otter-browser
 pacman
 patch
 pkgconf
@@ -57,7 +58,9 @@ wpa_supplicant-runit
 x11-ssh-askpass
 xcape
 xclip
+xcompmgr
 xcursor-premium
+xf86-video-amdgpu
 xorg-server
 xorg-xinit
 xorg-xmodmap
@@ -65,4 +68,5 @@ xorg-xprop
 xorg-xrandr
 xorg-xset
 xorg-xsetroot
+xorg-xwininfo
 zsh
