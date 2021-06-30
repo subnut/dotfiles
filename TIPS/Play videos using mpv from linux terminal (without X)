@@ -1,0 +1,15 @@
+Linux-only
+==========
+Run -
+	ls -l /dev/dri/card*
+
+Notice that the files are owned by the video group.
+Add yourself to video group -
+
+	usermod -G video subnut
+
+LOGOUT and LOGIN
+
+
+Use mpv like so -
+	mpv --vo=drm ...
