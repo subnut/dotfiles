@@ -38,6 +38,7 @@ aug END
 aug ManPlugin
     au!
     au BufWinEnter *.~ setl kp=:Man
+    au BufWinEnter *.c,*.h setl kp=:Man
     au BufWinEnter * if &l:kp=='man' | let &l:kp=':Man' | endif
 aug END
 fun! MyMan(a,b)
