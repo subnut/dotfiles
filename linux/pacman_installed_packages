@@ -50,6 +50,7 @@ tlp
 tlp-runit
 tmux
 tree
+ttf-inconsolata
 unzip
 vim
 webkit2gtk
@@ -62,7 +63,9 @@ xcompmgr
 xcursor-premium
 xf86-video-amdgpu
 xorg-server
+xorg-xev
 xorg-xinit
+xorg-xinput
 xorg-xmodmap
 xorg-xprop
 xorg-xrandr

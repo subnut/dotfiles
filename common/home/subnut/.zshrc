@@ -35,6 +35,7 @@ bindkey "^[" vi-cmd-mode		# vi-mode
 ## PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=./:$PATH
+typeset -U PATH path	# remove duplicates
 
 
 source ~/.zsh/git.zsh
@@ -71,4 +72,4 @@ source ~/.zsh/OMZ_snippets/clipboard.zsh || \
 
 # Set terminal title
 function precmd    { print -Pn "\e]0;%n@%m: %~\a"; }   # user@host: ~/cur/dir
-function preexec   { printf    "\e]0;$2\a";        }   # name of running command
+function preexec   { printf "\e]0;%s\a" "$2";      }   # name of running command

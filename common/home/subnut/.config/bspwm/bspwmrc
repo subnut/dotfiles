@@ -80,8 +80,9 @@ disown
 # sh -c "$(which safeeyes) -e &> /dev/null &"
 
 
-# if pidof acpid; then true; else zsh <<< "kitty sh -c 'echo \"Starting acpid ...\"; sudo acpid' &"; fi &
-# if [[ -r /dev/video0 || -r /dev/video1 ]]; then zsh <<< "kitty sh -c 'echo \"Disabling camera ...\"; sudo chmod -r /dev/video*' &"; fi &
+# if [[ -r /dev/video0 || -r /dev/video1 ]]
+# then zsh <<< "kitty sh -c 'echo \"Disabling camera ...\"
+# sudo chmod -r /dev/video*' &"; fi &
 
 urxvtd -q -f -o
 
@@ -94,4 +95,4 @@ disown
 
 test -x ~/.config/bspwm/desktop_manager || \
 	cc ~/.config/bspwm/desktop_manager.c -o ~/.config/bspwm/desktop_manager
-exec /bin/sh -c 'bspc subscribe report | tcc -run ~/.config/bspwm/desktop_manager.c | /bin/sh'
+exec /bin/sh -c 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'

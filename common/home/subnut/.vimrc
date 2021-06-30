@@ -38,9 +38,13 @@ aug END
 aug ManPlugin
     au!
     au BufWinEnter *.~ setl kp=:Man
-    au BufWinEnter *.c,*.h ++once runtime ftplugin/man.vim
-    au BufWinEnter *.c,*.h setl kp=:Man
+    au BufWinEnter * if &l:kp=='man' | let &l:kp=':Man' | endif
 aug END
+fun! MyMan(a,b)
+    exe a:a . ' Man ' . a:b
+endfun
+com! -nargs=+ -complete=shellcmd Man delcom Man  |  runtime ftplugin/man.vim
+            \  |  call MyMan(<q-mods>, <f-args>) |  delfun MyMan
 
 
 " Swap files {{{
