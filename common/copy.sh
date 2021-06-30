@@ -17,12 +17,14 @@ cp -v ~/.vimrc              home/subnut
 
 cp -v ~/.fzf.zsh            home/subnut
 cp -v ~/.zlogout            home/subnut
+cp -v ~/.zshenv             home/subnut
 cp -v ~/.zshrc              home/subnut
 
 cp -rv ~/.zsh               home/subnut
 cp -rv ~/.vim               home/subnut
 cp -rv ~/.config/bspwm      home/subnut/.config
 cp -rv ~/.config/sxhkd      home/subnut/.config
+cp -rv ~/.config/qt5ct      home/subnut/.config
 cp -rv ~/.config/fontconfig home/subnut/.config
 cp -rv ~/.config/xsettingsd home/subnut/.config
 cp -rv ~/.config/zathura    home/subnut/.config
@@ -31,5 +33,11 @@ cp -v  ~/.gtkrc-2.0         home/subnut
 cp -rv ~/.config/gtk-3.0    home/subnut/.config
 
 cp -rv ~/.local/bin/music   home/subnut/.local/bin
+
+
+# Sed is amazing!
+sed -i '/^\[SettingsWindow\|^geometry=@ByteArray/d' \
+  home/subnut/.config/qt5ct/qt5ct.conf
+
 
 # vim: et ts=2 sts=0 sw=0:

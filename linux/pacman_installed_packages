@@ -38,6 +38,7 @@ pacman
 patch
 pkgconf
 python
+qt5ct
 ranger
 runit
 rxvt-unicode
