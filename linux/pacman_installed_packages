@@ -1,3 +1,4 @@
+acpid
 alsa-utils
 amdvlk
 artix-archlinux-support
@@ -28,18 +29,21 @@ mpv
 noto-fonts
 noto-fonts-emoji
 ntfs-3g
+openbsd-netcat
 opendoas
 openssh
 os-prober
 otter-browser
 pacman
 patch
+picom
 pkgconf
 python
 qt5ct
 ranger
 runit
 rxvt-unicode
+socklog
 sudo
 sxhkd
 tcc
