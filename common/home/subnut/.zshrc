@@ -71,4 +71,4 @@ source ~/.zsh/OMZ_snippets/clipboard.zsh || \
 
 # Set terminal title
 function precmd    { print -Pn "\e]0;%n@%m: %~\a"; }   # user@host: ~/cur/dir
-function preexec   { echo -n   "\e]0;$2\a";        }   # name of running command
+function preexec   { printf    "\e]0;$2\a";        }   # name of running command

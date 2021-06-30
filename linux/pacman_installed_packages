@@ -53,6 +53,7 @@ webkit2gtk
 wpa_supplicant
 wpa_supplicant-runit
 x11-ssh-askpass
+xcape
 xclip
 xcursor-premium
 xorg-server
