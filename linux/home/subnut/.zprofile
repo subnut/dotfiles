@@ -1,10 +1,17 @@
 if [ "$TERM" = linux ]
 then
-	echo -n 'Start X? [Y/n] '
+	i=0
+	while test -f "/tmp/.X$i-lock"
+	do
+		echo "X is running on :$i"
+		i=$(( i+1 ))
+	done
+
+	printf "Start X on :$i? [Y/n] "
 	read ANSWER
 
 	if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'
 	then
-		exec xinit
+		exec xinit -- ":$i"
 	fi
 fi
