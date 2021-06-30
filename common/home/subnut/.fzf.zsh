@@ -20,7 +20,6 @@ export FZF_COMPLETION_OPTS='+c -x'
 
 export FZF_DEFAULT_OPTS="--ansi \
   --preview-window 'right:50%:hidden' \
-  --preview 'highlight -O ansi {}' \
   --color light \
   --bind ctrl-v:toggle-preview \
   --margin 10%,5% \

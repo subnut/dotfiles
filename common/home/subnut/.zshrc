@@ -44,19 +44,19 @@ source ~/.zsh/key_mappings.zsh
 source ~/.zsh/prompt.zsh
 source ~/.fzf.zsh
 
+
+[ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/arch.zsh
+
+
 test -x ~/.local/bin/light \
 	&& alias light="doas ~/.local/bin/light"
 
 
-if [ ! -d ~/.zsh/OMZ_snippets ]
-then
+test ! -d ~/.zsh/OMZ_snippets && \
 	mkdir -p ~/.zsh/OMZ_snippets
-fi
-
 source ~/.zsh/OMZ_snippets/key-bindings.zsh || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/key-bindings.zsh \
     -o  ~/.zsh/OMZ_snippets/key-bindings.zsh
-
 source ~/.zsh/OMZ_snippets/clipboard.zsh || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
     -o  ~/.zsh/OMZ_snippets/clipboard.zsh
