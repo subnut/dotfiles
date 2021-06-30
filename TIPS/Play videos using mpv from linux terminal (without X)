@@ -6,7 +6,7 @@ Run -
 Notice that the files are owned by the video group.
 Add yourself to video group -
 
-	usermod -G video subnut
+	usermod -a -G video subnut
 
 LOGOUT and LOGIN
 
