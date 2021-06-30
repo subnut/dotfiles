@@ -7,6 +7,7 @@ test -d home/subnut/.config     || mkdir -p home/subnut/.config
 test -d home/subnut/.local/bin  || mkdir -p home/subnut/.local/bin
 
 cp -v  ~/.zprofile          home/subnut
+cp -rv ~/.local/bin/mpv     home/subnut/.local/bin
 cp -rv ~/.local/bin/light   home/subnut/.local/bin
 cp -rv ~/.local/bin/battery home/subnut/.local/bin
 

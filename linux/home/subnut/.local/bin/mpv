@@ -1,0 +1,10 @@
+#!/bin/sh
+alias mpv="$(which -a mpv | grep -v "^$(dirname "$0")/$(basename "$0")" | head -n 1)" "$@"
+if mpv "$@"
+then :
+else
+	if [ $(uname) = Linux ] && [ -z "$DISPLAY" ]
+	then
+		mpv "$@" --vo=drm
+	fi
+fi
