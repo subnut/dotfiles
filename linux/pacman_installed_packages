@@ -69,4 +69,6 @@ xorg-xrandr
 xorg-xset
 xorg-xsetroot
 xorg-xwininfo
+zathura-pdf-mupdf
+zathura-ps
 zsh

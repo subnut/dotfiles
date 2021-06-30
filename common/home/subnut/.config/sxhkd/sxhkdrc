@@ -31,7 +31,7 @@ super + space
 
 # Restart sxhkd
 super + Escape
-	pkill sxhkd && exec sxhkd &> /dev/null
+	pkill -f "DISPLAY=$DISPLAY sxhkd" && exec sxhkd &> /dev/null
 
 # run some custom programs
 super + ctrl + Return ; {a,s,d,f,g}
