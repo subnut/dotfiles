@@ -38,6 +38,7 @@ pacman
 patch
 picom
 pkgconf
+poppler
 python
 qt5ct
 ranger
@@ -51,7 +52,6 @@ tlp
 tlp-runit
 tmux
 tree
-ttf-inconsolata
 unzip
 vim
 webkit2gtk

@@ -31,7 +31,10 @@ super + space
 
 # Restart sxhkd
 super + Escape
-	pkill -f "DISPLAY=$DISPLAY sxhkd" && exec sxhkd &> /dev/null
+	pkill -f "DISPLAY=$DISPLAY sxhkd"; \
+	echo 'trap "kill $(jobs -p)" HUP INT TERM;' \
+		"DISPLAY=$DISPLAY sxhkd &> /dev/null &" \
+		'wait $!' | sh &
 
 # run some custom programs
 super + ctrl + Return ; {a,s,d,f,g}

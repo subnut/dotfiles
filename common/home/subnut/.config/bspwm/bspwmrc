@@ -1,23 +1,12 @@
 #!/bin/sh
 
-sxhkd &
-# pkill -f "DISPLAY=$DISPLAY sxhkd"
-# sh -c "DISPLAY=$DISPLAY sxhkd &> /dev/null" &
-# disown
+pkill -f "DISPLAY=$DISPLAY sxhkd"
+sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY sxhkd &> /dev/null & \
+	wait \$!" &
 
 xsetroot -cursor_name left_ptr &
 xset r rate 300 20
-
-xmodmap -e 'add Lock = XF86Favorites ' && \
-xmodmap -e 'remove Lock = Caps_Lock' && \
-xmodmap -e 'remove control = Control_L' && \
-xmodmap -e 'keysym Caps_Lock = Control_L' && \
-xmodmap -e 'add control = Control_L' && \
-# pkill -f "DISPLAY=$DISPLAY xcape"
-# sh -c "DISPLAY=$DISPLAY xcape -t 300 -e 'Control_L=XF86Favorites'" &
-# disown
-xcape -t 300 -e 'Control_L=XF86Favorites' &
-
 
 bspc config border_width        10
 bspc config window_gap          20
@@ -35,7 +24,7 @@ bspc config focus_follows_pointer       true
 bspc config pointer_follows_focus       true
 bspc config pointer_follows_monitor     true
 bspc config merge_overlapping_monitors  true
-bspc config ignore_ewmh_fullscreen      true
+bspc config ignore_ewmh_struts          true
 
 # NOTE: use xprop to get these values
 bspc rule -a VirtualBoxVM state=floating
@@ -52,15 +41,15 @@ bspc rule -a Zathura state=tiled
 bspc rule -a Surf state=tiled
 
 
-# pkill -f "DISPLAY=$DISPLAY xmousepasteblock"
-# sh -c "DISPLAY=$DISPLAY xmousepasteblock &> /dev/null" &
-# disown
-xmousepasteblock &> /dev/null &
+pkill -f "DISPLAY=$DISPLAY xmousepasteblock"
+sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY xmousepasteblock &> /dev/null & \
+	wait \$!" &
 
 # pkill -f  "DISPLAY=$DISPLAY clipster"
-# sh -c "DISPLAY=$DISPLAY clipster -d &> /dev/null" &
+# sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY clipster -d &> /dev/null" &
 # disown
-clipster -d &> /dev/null &
+# clipster -d &> /dev/null &
 
 
 # safeeyes -e &> /dev/null &
@@ -71,17 +60,41 @@ clipster -d &> /dev/null &
 # then zsh <<< "kitty sh -c 'echo \"Disabling camera ...\"
 # sudo chmod -r /dev/video*' &"; fi &
 
-urxvtc || urxvtd -q -f -o
 
-# pkill -q picom
-# picom --experimental-backends &> /dev/null &
+pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
+|| sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY urxvtd -q -o &> /dev/null & \
+	wait \$!" &
 
 # pkill -f "DISPLAY=$DISPLAY xcompmgr"
-# sh -c "DISPLAY=$DISPLAY xcompmgr &> /dev/null" &
+# pkill -q picom
+# picom --experimental-backends &> /dev/null &
+# sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY xcompmgr &> /dev/null" &
 # disown
 
-picom &
+pkill -f "DISPLAY=$DISPLAY picom"
+sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY picom &> /dev/null & \
+	wait \$!" &
 
 test -x ~/.config/bspwm/desktop_manager || \
 	cc ~/.config/bspwm/desktop_manager.c -o ~/.config/bspwm/desktop_manager
-exec /bin/sh -c 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
+
+pkill -f  "DISPLAY=$DISPLAY bspc subscribe report"
+/bin/sh -c "DISPLAY=$DISPLAY bspc subscribe report \
+	| ~/.config/bspwm/desktop_manager \
+	| /bin/sh"
+
+
+if ! pgrep -f "DISPLAY=$DISPLAY xcape"
+then
+	xmodmap -e 'add Lock = XF86Favorites ' && \
+	xmodmap -e 'remove Lock = Caps_Lock' && \
+	xmodmap -e 'remove control = Control_L' && \
+	xmodmap -e 'keysym Caps_Lock = Control_L' && \
+	xmodmap -e 'add control = Control_L' && \
+	# pkill -f "DISPLAY=$DISPLAY xcape"
+	sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+		DISPLAY=$DISPLAY xcape -d -t 300 -e 'Control_L=XF86Favorites' & \
+		wait \$!" &
+fi
