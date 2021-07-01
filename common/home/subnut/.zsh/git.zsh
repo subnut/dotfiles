@@ -5,12 +5,14 @@ alias ga='git add'
 alias gaa='git add --all'
 alias gaav='git add --all --verbose'
 alias gd='git diff --patience'
+alias gds='gd --staged'
 alias gdh='gd HEAD'
 alias gdh1='gd HEAD~1 HEAD'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gp='git push'
-alias gpf='git push --force-with-lease'
+gpf () { echo 'DO NOT USE --force' >&2; echo 'Use --force-with-lease' >&2; return 1; }
+alias gpfwl='git push --force-with-lease'
 alias gpull='git pull'
 gcm () { DISPLAY= git commit    -m "$*" }
 gcma() { DISPLAY= git commit -a -m "$*" }
