@@ -2,6 +2,13 @@
 cd "$(dirname "$0")"
 echo
 
+if ! test $(whoami) = subnut
+then
+	echo "$(whoami) is a traitor. Shoo!" >&2
+	echo "HINT: username must be subnut" >&2
+	exit 2
+fi
+
 echo '==== Common files ===='
 ./common/paste.sh
 echo

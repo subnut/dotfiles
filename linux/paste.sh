@@ -1,12 +1,24 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+
+if ! test "$(sudo whoami)" = root
+then
+  echo "ERROR: This script needs sudo access to work" >&2
+  echo "Run visudo and configure sudo correctly" >&2
+  echo "HINT: Is subnut added to :wheel ?" >&2
+  echo "      usermod -a -G wheel subnut" >&2
+  exit 1
+fi
+
+cp -rv home/subnut /home
+find root -type f | while read FILE
+do
+  sudo cp -v "$FILE"   "/$FILE"
+  sudo chown root:root "/$FILE"
+done
+
+
 run() { echo "> $*"; sh -c "$*"; }
-
-run      cp -rv home/subnut /home
-run sudo cp -rv root/etc    /
-run sudo cp -rv root/usr    /
-
-
 
 if test -x /usr/bin/pacman
 then
