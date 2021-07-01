@@ -35,14 +35,14 @@ aug MyClearSignColumn
     au ColorScheme * hi SignColumn ctermbg=none
 aug END
 
+
 aug ManPlugin
     au!
-    au BufWinEnter *.~ setl kp=:Man
-    au BufWinEnter *.c,*.h setl kp=:Man
-    au BufWinEnter * if &l:kp=='man' | let &l:kp=':Man' | endif
+    au BufWinEnter *.c,*.h  setl kp=:Man
+    au BufWinEnter *.~,*.?~ setl kp=:Man
 aug END
-fun! MyMan(a,b)
-    exe a:a . ' Man ' . a:b
+fun! MyMan(a,...)
+    exe a:a . ' Man ' . join(a:000[1:])
 endfun
 com! -nargs=+ -complete=shellcmd Man delcom Man  |  runtime ftplugin/man.vim
             \  |  call MyMan(<q-mods>, <f-args>) |  delfun MyMan

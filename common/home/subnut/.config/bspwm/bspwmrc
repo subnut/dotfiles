@@ -46,6 +46,7 @@ sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
 	DISPLAY=$DISPLAY xmousepasteblock &> /dev/null & \
 	wait \$!" &
 
+
 # pkill -f  "DISPLAY=$DISPLAY clipster"
 # sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY clipster -d &> /dev/null" &
 # disown
@@ -78,23 +79,23 @@ sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
 	wait \$!" &
 
 test -x ~/.config/bspwm/desktop_manager || \
-	cc ~/.config/bspwm/desktop_manager.c -o ~/.config/bspwm/desktop_manager
+	cc ~/.config/bspwm/desktop_manager.c \
+	-o ~/.config/bspwm/desktop_manager \
+	-O9 -fpie -static
 
 pkill -f  "DISPLAY=$DISPLAY bspc subscribe report"
-/bin/sh -c "DISPLAY=$DISPLAY bspc subscribe report \
+/bin/sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY bspc subscribe report \
 	| ~/.config/bspwm/desktop_manager \
-	| /bin/sh"
+	| /bin/sh & \
+	wait \$!" &
 
 
-if ! pgrep -f "DISPLAY=$DISPLAY xcape"
-then
-	xmodmap -e 'add Lock = XF86Favorites ' && \
-	xmodmap -e 'remove Lock = Caps_Lock' && \
-	xmodmap -e 'remove control = Control_L' && \
-	xmodmap -e 'keysym Caps_Lock = Control_L' && \
-	xmodmap -e 'add control = Control_L' && \
-	# pkill -f "DISPLAY=$DISPLAY xcape"
-	sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-		DISPLAY=$DISPLAY xcape -d -t 300 -e 'Control_L=XF86Favorites' & \
-		wait \$!" &
-fi
+xmodmap -e 'add Lock = XF86Favorites ' && \
+xmodmap -e 'remove Lock = Caps_Lock' && \
+xmodmap -e 'remove control = Control_L' && \
+xmodmap -e 'keysym Caps_Lock = Control_L' && \
+xmodmap -e 'add control = Control_L' && \
+sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY xcape -d -t 300 -e 'Control_L=XF86Favorites' & \
+	wait \$!" &

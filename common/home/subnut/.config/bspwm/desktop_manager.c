@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 int
 main(void)
@@ -17,34 +18,47 @@ main(void)
 	count = 0;
 	should_count = 0;
 
+	/* while (!usleep(8000)) */
 	for (;;)
 	{
 		ppch = pch;
 		pch  = cch;
 		cch  = getchar();
+		fputc(cch, stderr);
 
 		if (cch == EOF)
 			break;
 
 		if (cch == 'M' && (pch == ':' || (pch == 'W' && ppch == '\n')))
+		{
 			should_count = 1;
+			continue;
+		}
 
 		if (cch == 'm' && (pch == ':' || (pch == 'W' && ppch == '\n')))
+		{
 			should_count = 0;
+			continue;
+		}
 
 		if (should_count)
+		{
 			if ((cch == 'f' || cch == 'F') && pch == ':')
 				count++;
+		}
+		else continue;
 
 
 		if (cch == '\n')
 		{
 			if (count > 1)
-				printf("bspc desktop next.!focused.!occupied.local -r\n");
-			else if (count < 1)
-				printf("bspc monitor -a Desktop\n");
+				puts("bspc desktop next.!focused.!occupied.local -r");
+			if (count < 1)
+				puts("bspc monitor -a Desktop");
 			fflush(stdout);
 			count = 0;
+			sleep(1);
+			continue;
 		}
 	}
 
