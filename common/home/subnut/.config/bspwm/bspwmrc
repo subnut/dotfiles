@@ -1,9 +1,12 @@
 #!/bin/sh
 
-pkill -f "DISPLAY=$DISPLAY sxhkd"
-sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY sxhkd &> /dev/null & \
+destroy() { pkill -f "DISPLAY=$DISPLAY $*"; }
+spawn()
+{
+	sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY $* &> /dev/null & \
 	wait \$!" &
+}
 
 xsetroot -cursor_name left_ptr &
 xset r rate 300 20
@@ -41,11 +44,12 @@ bspc rule -a feh state=floating layer=above focus=on border=off
 bspc rule -a Zathura state=tiled
 bspc rule -a Surf state=tiled
 
+destroy sxhkd
+spawn sxhkd
 
-pkill -f "DISPLAY=$DISPLAY xmousepasteblock"
-sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY xmousepasteblock &> /dev/null & \
-	wait \$!" &
+destroy xmousepasteblock
+spawn xmousepasteblock
+
 
 
 # pkill -f  "DISPLAY=$DISPLAY clipster"
@@ -64,9 +68,8 @@ sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
 
 
 pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
-|| sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY urxvtd -q -o &> /dev/null & \
-	wait \$!" &
+	|| spawn urxvtd -q -o
+
 
 # pkill -f "DISPLAY=$DISPLAY xcompmgr"
 # pkill -q picom
@@ -74,29 +77,27 @@ pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
 # sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY xcompmgr &> /dev/null" &
 # disown
 
-pkill -f "DISPLAY=$DISPLAY picom"
-sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY picom &> /dev/null & \
-	wait \$!" &
+destroy picom
+spawn picom
+
 
 test -x ~/.config/bspwm/desktop_manager || \
 	cc ~/.config/bspwm/desktop_manager.c \
 	-o ~/.config/bspwm/desktop_manager \
 	-O9 -fpie -static
 
-pkill -f  "DISPLAY=$DISPLAY bspc subscribe report"
-/bin/sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY bspc subscribe report \
-	| ~/.config/bspwm/desktop_manager \
-	| /bin/sh & \
-	wait \$!" &
+destroy bspc subscribe report
+spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
+# /bin/sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+# 	DISPLAY=$DISPLAY bspc subscribe report \
+# 	| ~/.config/bspwm/desktop_manager \
+# 	| /bin/sh & \
+# 	wait \$!" &
 
 
-xmodmap -e 'add Lock = XF86Favorites ' && \
+xmodmap -e 'add Lock = XF86Favorites' && \
 xmodmap -e 'remove Lock = Caps_Lock' && \
 xmodmap -e 'remove control = Control_L' && \
 xmodmap -e 'keysym Caps_Lock = Control_L' && \
 xmodmap -e 'add control = Control_L' && \
-sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY xcape -d -t 300 -e 'Control_L=XF86Favorites' & \
-	wait \$!" &
+spawn xcape -d -t 300 -e Control_L=XF86Favorites
