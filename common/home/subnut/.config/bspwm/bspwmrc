@@ -45,7 +45,7 @@ bspc rule -a Zathura state=tiled
 bspc rule -a Surf state=tiled
 
 destroy sxhkd
-spawn sxhkd
+spawn sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)
 
 destroy xmousepasteblock
 spawn xmousepasteblock

@@ -5,11 +5,15 @@ test -d home/subnut             || mkdir -p home/subnut
 test -d home/subnut/.zsh        || mkdir -p home/subnut/.zsh
 test -d home/subnut/.config     || mkdir -p home/subnut/.config
 test -d home/subnut/.local/bin  || mkdir -p home/subnut/.local/bin
+test -d root/usr/local/bin      || mkdir -p root/usr/local/bin
+test -d root/etc                || mkdir -p root/etc
 
 cp -v  ~/.zprofile          home/subnut
 cp -rv ~/.local/bin/mpv     home/subnut/.local/bin
-cp -rv ~/.local/bin/light   home/subnut/.local/bin
 cp -rv ~/.local/bin/battery home/subnut/.local/bin
+
+cp -rv /usr/local/bin/light root/usr/local/bin
+cp -v  /etc/doas.conf       root/etc
 
 run() { echo "$*"; sh -c "$*"; }
 

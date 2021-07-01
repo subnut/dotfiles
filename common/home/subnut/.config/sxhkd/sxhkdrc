@@ -28,10 +28,11 @@ ctrl + space
 
 # Restart sxhkd
 super + Escape
+	COMMAND="sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)"; \
 	pkill -f "DISPLAY=$DISPLAY sxhkd"; \
-	echo 'trap "kill $(jobs -p)" HUP INT TERM;' \
-		"DISPLAY=$DISPLAY sxhkd &> /dev/null &" \
-		'wait $!' | sh &
+	sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	DISPLAY=$DISPLAY $COMMAND &> /dev/null & \
+	wait \$!" &
 
 # run some custom programs
 super + ctrl + Return ; {a,s,d,f,g}

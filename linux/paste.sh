@@ -1,10 +1,12 @@
 #!/bin/sh
 cd "$(dirname "$0")"
-
-cp -rv home/subnut /home
-
-
 run() { echo "> $*"; sh -c "$*"; }
+
+run      cp -rv home/subnut /home
+run sudo cp -rv root/etc    /
+run sudo cp -rv root/usr    /
+
+
 
 if test -x /usr/bin/pacman
 then

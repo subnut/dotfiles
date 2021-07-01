@@ -1,0 +1,6 @@
+{XF86MonBrightnessUp,XF86MonBrightnessDown}
+	doas light {+,-}5
+{XF86AudioRaiseVolume,XF86AudioLowerVolume}
+	amixer set Master -Mq 5%{+,-}
+{XF86AudioMute,XF86AudioMicMute}
+	amixer set {Master,Capture} -q toggle
