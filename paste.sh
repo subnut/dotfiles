@@ -26,7 +26,7 @@ fi
 
 if [ $(uname) = OpenBSD ]
 then
-echo '==== Linux files ===='
+echo '==== OpenBSD files ===='
 ./openbsd/paste.sh
 echo
 fi
