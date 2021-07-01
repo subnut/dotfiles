@@ -2,16 +2,15 @@
 # wm independent hotkeys
 #
 
+# Workaround for xcape
 XF86Favorites
 	:
 
-# terminal emulator
+# terminal emulators
 super + Return
 	urxvtc
-	# kitty &> /dev/null
 super + shift + Return
 	~/.local/bin/st
-	# bspc config -d focused window_gap 0; \
 
 
 # File manager
@@ -22,10 +21,8 @@ super + {_,shift +}e
 ctrl + space
 	~/.local/bin/dmenu_run &> /dev/null
 
-super + space
-	~/.config/rofi/launcher.sh &> /dev/null
 
-# make sxhkd reload its configuration files:
+# Make sxhkd reload its configuration files
 # super + Escape
 # 	pkill -USR1 -x sxhkd
 
@@ -38,7 +35,7 @@ super + Escape
 
 # run some custom programs
 super + ctrl + Return ; {a,s,d,f,g}
-	{librewolf,falkon,otter-browser --new-window,surf -s -z 1.8 https://html.duckduckgo.com/html,firefox} &> /dev/null
+	{librewolf,falkon,otter-browser --new-window,:,firefox} &> /dev/null
 
 
 # turn off display
@@ -63,13 +60,12 @@ super + {ctrl,shift} + semicolon
 	xdotool type "$emoji"
 
 
-# toggle polybar
+# toggle BAR
+# TODO: decide and install a bar
 super + p
 	bspc config top_padding $((`bspc config bottom_padding` + 35))
-
 super + ctrl + p
 	bspc config top_padding $((`bspc config bottom_padding` + 35))
-
 super + shift + p
 	bspc config top_padding $(bspc config bottom_padding)
 
@@ -164,10 +160,9 @@ super + m
 #
 
 # set the window state
-super + {t,s,f}
-	bspc node -t {tiled,floating || bspc node -t "~floating",fullscreen || bspc node -t "~fullscreen"}
-super + shift + {t,s}
-	bspc node -t pseudo_tiled || bspc node -t "~pseudo_tiled"
+super + {t,s,f,shift + t, shift + s}
+	STATE={tiled,floating,fullscreen,pseudo_tiled,pseudo_tiled}; \
+	{ bspc node -t $STATE || bspc node -t "~$STATE"; }
 
 # set the node flags
 # sticky  => show on all desktops (of current monitor)
@@ -193,7 +188,8 @@ super + {h,j,k,l}
 
 # send node for presel || swap node in given direction
 super + shift + {h,j,k,l}
-	bspc node -n {west.!automatic || bspc node -s west,south.!automatic || bspc node -s south,north.!automatic || bspc node -s north ,east.!automatic || bspc node -s east}
+	DIR={west,south,north,east}; \
+	{bspc node -n $DIR.!automatic || bspc node -s $DIR;}
 
 # focus the next/previous node/desktop in the current desktop
 super + {_,shift + }Tab
@@ -201,7 +197,7 @@ super + {_,shift + }Tab
 
 # focus nodes, not leaves
 alt + {_,shift + } + {_,ctrl} +Tab
-	bspc node -f {next,prev}.local.{leaf,\!leaf} || bspc node -f next.local.leaf
+	bspc node -f {next,prev}.local.{leaf,!leaf} || bspc node -f next.local.leaf
 
 # focus the last node/desktop
 {alt,super} + grave
@@ -214,18 +210,21 @@ alt + {_,shift + } + {_,ctrl} +Tab
 #	bspc {desktop -f,node -d} '^{1-9,10}'
 
 super + {_,shift + }{1-9}
-	bspc {desktop -f,node -d} focused:'^{1-9}'.local || if bspc query -N -n focused.sticky -d focused;\
+	bspc {desktop -f,node -d} focused:'^{1-9}'.local \
+	|| if bspc query -N -n focused.sticky -d focused;\
 	then notify-send "Node sticky" -a "bspwm" -t 1000 -u critical;\
 	else notify-send "No node to send" -a "bspwm" -t 1000 -u critical;\
 	fi
 
 super + {_,shift + }F{1-9}
-	bspc {desktop -f,node -d} focused:'^1{1-9}'.local || if bspc query -N -n focused.sticky -d focused;\
+	bspc {desktop -f,node -d} focused:'^1{1-9}'.local \
+	|| if bspc query -N -n focused.sticky -d focused;\
 	then notify-send "Node sticky" -a "bspwm" -t 1000 -u critical;\
 	else notify-send "No node to send" -a "bspwm" -t 1000 -u critical;\
 	fi
 super + {_,shift + }F1{0-2}
-	bspc {desktop -f,node -d} focused:'^2{0-2}'.local || if bspc query -N -n focused.sticky -d focused;\
+	bspc {desktop -f,node -d} focused:'^2{0-2}'.local \
+	|| if bspc query -N -n focused.sticky -d focused;\
 	then notify-send "Node sticky" -a "bspwm" -t 1000 -u critical;\
 	else notify-send "No node to send" -a "bspwm" -t 1000 -u critical;\
 	fi
@@ -353,7 +352,8 @@ super + period
 
 # Swap focused desktop with focused desktop of last monitor
 super + ctrl + grave
-	bspc desktop -s $(bspc query --desktops -d last:focused) --follow || if bspc query -N -n .sticky -d focused;\
+	bspc desktop -s $(bspc query --desktops -d last:focused) --follow \
+	|| if bspc query -N -n .sticky -d focused;\
 	then notify-send "Sticky node present. Can't swap." -a "bspwm" -t 1000 -u critical;\
 	else notify-send "Self-swap not allowed" -a "bspwm" -t 1000 -u critical;\
 	fi
@@ -376,7 +376,8 @@ super + ctrl + {_,shift + }Tab
 
 # Flip layout
 ~alt + {h,j,k,l}
-	bspc query -N --node .focused.!window &> /dev/null && bspc node -F {vertical,horizontal,horizontal,vertical}
+	DIR={vertical,horizontal,horizontal,vertical}; \
+	bspc query -N --node .focused.!window &> /dev/null && bspc node -F $DIR
 
 
 # Equalize/Reset sizing of child nodes

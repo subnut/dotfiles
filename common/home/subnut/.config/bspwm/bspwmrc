@@ -15,7 +15,7 @@ bspc config borderless_monocle  true
 bspc config gapless_monocle     false
 bspc config single_monocle      true
 bspc config initial_polarity    first_child
-bspc config status_prefix       :
+bspc config status_prefix       W:
 
 bspc config normal_border_color  '#808080'
 bspc config active_border_color  '#404040'
@@ -27,17 +27,17 @@ bspc config pointer_follows_monitor     true
 bspc config merge_overlapping_monitors  true
 bspc config ignore_ewmh_struts          true
 
-# NOTE: use xprop to get these values
-bspc rule -a VirtualBoxVM state=floating
-bspc rule -a "VirtualBox Machine" state=tiled
-bspc rule -a jome state=floating
-bspc rule -a '*:*:Picture-in-Picture' state=floating layer=above sticky=on focus=off
-bspc rule -a '*:*:Picture-in-picture' state=floating layer=above sticky=on focus=off
+# NOTE: use `xprop | grep ^WM_NAME` to get these values
+bspc rule -a VirtualBoxVM state=floating border=off
+bspc rule -a "VirtualBox Machine" state=tiled border=off
+bspc rule -a jome state=floating border=off
+bspc rule -a '*:*:Picture-in-Picture' state=floating layer=above sticky=on focus=off border=off
+bspc rule -a '*:*:Picture-in-picture' state=floating layer=above sticky=on focus=off border=off
 bspc rule -a Safeeyes state=floating layer=above fullscreen=off focus=off
 bspc rule -a Clipster layer=above
-bspc rule -a mpv state=pseudo_tiled
+bspc rule -a mpv state=pseudo_tiled border=off
 bspc rule -a GParted state=floating layer=above
-bspc rule -a feh state=floating layer=above focus=on
+bspc rule -a feh state=floating layer=above focus=on border=off
 bspc rule -a Zathura state=tiled
 bspc rule -a Surf state=tiled
 
