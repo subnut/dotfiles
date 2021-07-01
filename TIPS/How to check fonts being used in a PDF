@@ -1,0 +1,2 @@
+Install poppler (http://poppler.freedesktop.org).
+It contains the tools pdffonts, pdfimages, pdf2text, pdf2ps, etc.
