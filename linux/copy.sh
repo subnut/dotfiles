@@ -13,6 +13,7 @@ cp -rv ~/.local/bin/mpv     home/subnut/.local/bin
 cp -rv ~/.local/bin/battery home/subnut/.local/bin
 
 cp -rv /usr/local/bin/light root/usr/local/bin
+cp -v  /etc/acpi/handler.sh root/etc/acpi
 cp -v  /etc/doas.conf       root/etc
 
 run() { echo "$*"; sh -c "$*"; }
