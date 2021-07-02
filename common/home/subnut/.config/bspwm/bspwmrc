@@ -61,15 +61,19 @@ spawn xmousepasteblock
 # destroy xcompmgr
 # spawn xcompmgr
 
-destroy picom
-spawn picom
-# spawn picom --experimental-backends
-
 # destroy clipster
 # spawn clipster -d
 
 # destroy safeeyes
 # spawn safeeyes -e
+
+if [ ! $(uname) = OpenBSD ]
+then
+        destroy picom
+        spawn picom
+        # spawn picom --experimental-backends
+fi
+
 
 xmodmap -e 'add Lock = XF86Favorites' && \
 xmodmap -e 'remove Lock = Caps_Lock' && \

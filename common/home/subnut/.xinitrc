@@ -8,4 +8,17 @@ else
 	# xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.001
 	xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1
 fi
-exec bspwm
+
+if [ ! $(uname) = OpenBSD ]
+then
+	eval $(ssh-agent -s)
+	ssh-add < /dev/null
+fi
+
+bspwm
+
+if [ ! $(uname) = OpenBSD ]
+then
+	eval $(ssh-agent -s -k)
+	ssh-add -D < /dev/null
+fi

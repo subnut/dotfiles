@@ -17,5 +17,7 @@ X=home/subnut/.local/bin
 su subnut -c "mkdir -p $X"
 X=$X/mpv
 su subnut -c "cp $X /$X"
+su subnut -c "ln -s ~/.xinitrc ~/.xsession"
+
 
 # vim: et ts=2 sts=0 sw=0:
