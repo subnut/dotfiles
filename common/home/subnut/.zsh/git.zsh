@@ -1,5 +1,16 @@
+# vim:set et ts=2 sw=0 sts=0:
 export GPG_TTY=$(tty)
-alias git='DISPLAY= git' # we unset DISPLAY to make gpg-agent use pinentry-curses instead of pinentry-gtk-2
+my_git ()
+{
+  (
+    unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
+    export SSH_AUTH_SOCK="$GIT_AUTH_SOCK"
+    export SSH_AGENT_PID="$GIT_AGENT_PID"
+    unset  GIT_AUTH_SOCK   GIT_AGENT_PID
+    git "$@"
+  )
+}
+alias git=my_git
 alias g=git
 alias ga='git add'
 alias gaa='git add --all'
@@ -33,4 +44,3 @@ alias gsw='git switch'
 #alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all"
 #alias glog='git log --oneline --decorate --graph'
 #alias gloga='git log --oneline --decorate --graph --all'
-
