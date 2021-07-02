@@ -13,8 +13,8 @@ fi
 cp -rv home/subnut /home
 find root -type f | while read FILE
 do
-  sudo cp -v "$FILE"   "/$FILE"
-  sudo chown root:root "/$FILE"
+  sudo cp -v "$FILE"   "/${FILE#root}"
+  sudo chown root:root "/${FILE#root}"
 done
 
 
