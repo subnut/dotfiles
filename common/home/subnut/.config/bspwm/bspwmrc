@@ -3,9 +3,22 @@
 destroy() { pkill -f "DISPLAY=$DISPLAY $*"; }
 spawn()
 {
-	sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	DISPLAY=$DISPLAY $* &> /dev/null & \
-	wait \$!" &
+	## v1.0
+	# sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+	# DISPLAY=$DISPLAY $* &> /dev/null & \
+	# wait \$!" &
+
+	## v2.0
+	# setsid sh -c "trap 'kill 0' HUP INT TERM; \
+	# DISPLAY=$DISPLAY $* &> /dev/null & \
+	# wait \$!"
+
+	## v3.0
+	setsid sh -c "$(echo                    \
+	'trap' "'kill 0'" 'HUP INT TERM;'       \
+	"DISPLAY=$DISPLAY $* &> /dev/null &"    \
+	'wait $!'                               \
+	)"
 }
 
 xsetroot -cursor_name left_ptr &
@@ -88,11 +101,6 @@ test -x ~/.config/bspwm/desktop_manager || \
 
 destroy bspc subscribe report
 spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
-# /bin/sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-# 	DISPLAY=$DISPLAY bspc subscribe report \
-# 	| ~/.config/bspwm/desktop_manager \
-# 	| /bin/sh & \
-# 	wait \$!" &
 
 
 xmodmap -e 'add Lock = XF86Favorites' && \
@@ -101,3 +109,5 @@ xmodmap -e 'remove control = Control_L' && \
 xmodmap -e 'keysym Caps_Lock = Control_L' && \
 xmodmap -e 'add control = Control_L' && \
 spawn xcape -d -t 300 -e Control_L=XF86Favorites
+
+# vim:set noet ts=8 sw=0 sts=0:
