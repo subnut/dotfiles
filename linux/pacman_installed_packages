@@ -5,10 +5,13 @@ amdvlk
 artix-archlinux-support
 base
 bspwm
+colordiff
+dash
 dhcpcd
 dhcpcd-runit
 efibootmgr
 elogind-runit
+falkon
 feh
 firefox
 flac
@@ -22,6 +25,7 @@ libva-mesa-driver
 linux
 linux-firmware
 lxappearance-gtk3
+maim
 make
 man-db
 man-pages
@@ -45,6 +49,7 @@ qt5ct
 ranger
 runit
 rxvt-unicode
+shellcheck
 socklog
 sudo
 sxhkd
