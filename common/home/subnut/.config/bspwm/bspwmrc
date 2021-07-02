@@ -1,25 +1,30 @@
 #!/bin/sh
 
+# if [[ -r /dev/video0 || -r /dev/video1 ]]
+# then zsh <<< "kitty sh -c 'echo \"Disabling camera ...\"
+# sudo chmod -r /dev/video*' &"; fi &
+
+
 destroy() { pkill -f "DISPLAY=$DISPLAY $*"; }
-spawn()
+spawn() #[
 {
-	## v1.0
-	# sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-	# DISPLAY=$DISPLAY $* &> /dev/null & \
-	# wait \$!" &
+        ## v3.0
+        setsid sh -c "$(echo                    \
+        'trap' "'kill 0'" 'HUP INT TERM;'       \
+        "DISPLAY=$DISPLAY $* &> /dev/null &"    \
+        'wait $!'                               \
+        )"
 
-	## v2.0
-	# setsid sh -c "trap 'kill 0' HUP INT TERM; \
-	# DISPLAY=$DISPLAY $* &> /dev/null & \
-	# wait \$!"
+        ## v2.0
+        # setsid sh -c "trap 'kill 0' HUP INT TERM; \
+        # DISPLAY=$DISPLAY $* &> /dev/null & \
+        # wait \$!"
 
-	## v3.0
-	setsid sh -c "$(echo                    \
-	'trap' "'kill 0'" 'HUP INT TERM;'       \
-	"DISPLAY=$DISPLAY $* &> /dev/null &"    \
-	'wait $!'                               \
-	)"
-}
+        ## v1.0
+        # sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
+        # DISPLAY=$DISPLAY $* &> /dev/null & \
+        # wait \$!" &
+} #]
 
 xsetroot -cursor_name left_ptr &
 xset r rate 300 20
@@ -60,48 +65,24 @@ bspc rule -a Surf state=tiled
 destroy sxhkd
 spawn sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)
 
+pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
+|| spawn urxvtd -q -o
+
 destroy xmousepasteblock
 spawn xmousepasteblock
 
-
-
-# pkill -f  "DISPLAY=$DISPLAY clipster"
-# sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY clipster -d &> /dev/null" &
-# disown
-# clipster -d &> /dev/null &
-
-
-# safeeyes -e &> /dev/null &
-# sh -c "$(which safeeyes) -e &> /dev/null &"
-
-
-# if [[ -r /dev/video0 || -r /dev/video1 ]]
-# then zsh <<< "kitty sh -c 'echo \"Disabling camera ...\"
-# sudo chmod -r /dev/video*' &"; fi &
-
-
-pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
-	|| spawn urxvtd -q -o
-
-
-# pkill -f "DISPLAY=$DISPLAY xcompmgr"
-# pkill -q picom
-# picom --experimental-backends &> /dev/null &
-# sh -c "trap 'kill 0' HUP INT TERM; DISPLAY=$DISPLAY xcompmgr &> /dev/null" &
-# disown
+# destroy xcompmgr
+# spawn xcompmgr
 
 destroy picom
 spawn picom
+# spawn picom --experimental-backends
 
+# destroy clipster
+# spawn clipster -d
 
-test -x ~/.config/bspwm/desktop_manager || \
-	cc ~/.config/bspwm/desktop_manager.c \
-	-o ~/.config/bspwm/desktop_manager \
-	-O9 -fpie -static
-
-destroy bspc subscribe report
-spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
-
+# destroy safeeyes
+# spawn safeeyes -e
 
 xmodmap -e 'add Lock = XF86Favorites' && \
 xmodmap -e 'remove Lock = Caps_Lock' && \
@@ -110,4 +91,13 @@ xmodmap -e 'keysym Caps_Lock = Control_L' && \
 xmodmap -e 'add control = Control_L' && \
 spawn xcape -d -t 300 -e Control_L=XF86Favorites
 
-# vim:set noet ts=8 sw=0 sts=0:
+
+test -x ~/.config/bspwm/desktop_manager ||  \
+cc ~/.config/bspwm/desktop_manager.c        \
+-o ~/.config/bspwm/desktop_manager          \
+-O9 -fpie -static
+
+destroy bspc subscribe report
+spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
+
+# vim:set et ts=4 sw=8 sts=0 fdm=marker fmr=[,]:
