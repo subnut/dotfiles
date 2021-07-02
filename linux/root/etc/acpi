@@ -7,9 +7,7 @@ case "$1" in
             PBTN|PWRF)
                 logger 'PowerButton pressed'
                 ;;
-            *)
-                logger "ACPI action undefined: $2"
-                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
         esac
         ;; #]
     button/sleep) #[
@@ -18,9 +16,7 @@ case "$1" in
                 logger 'SleepButton pressed'
                 zzz
                 ;;
-            *)
-                logger "ACPI action undefined: $2"
-                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
         esac
         ;; #]
     button/lid) #[
@@ -42,9 +38,7 @@ case "$1" in
             open)
                 logger 'LID opened'
                 ;;
-            *)
-                logger "ACPI action undefined: $3"
-                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
         esac
         ;; #]
     ac_adapter) #[
@@ -59,9 +53,7 @@ case "$1" in
                         ;;
                 esac
                 ;;
-            *)
-                logger "ACPI action undefined: $2"
-                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
         esac
         ;; #]
     battery) #[
@@ -78,7 +70,51 @@ case "$1" in
                 ;;
             CPU0)
                 ;;
-            *)  logger "ACPI action undefined: $2" ;;
+            *)  logger "ACPI action undefined: $1 / $2"
+        esac
+        ;; #]
+    video/brightness*) #[
+        case "$2" in
+            BRTUP)
+                logger Brightness up button pressed
+                /usr/local/bin/light +2
+                ;;
+            BRTDN)
+                logger Brightness down button pressed
+                /usr/local/bin/light -2
+                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
+        esac
+        ;; #]
+    button/volume*) #[
+        case "$2" in
+            VOLUP)
+                logger Volume up button pressed
+                amixer set Master -Mq 5%+
+                ;;
+            VOLDN)
+                logger Volume down button pressed
+                amixer set Master -Mq 5%-
+                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
+        esac
+        ;; #]
+    button/mute) #[
+        case "$2" in
+            MUTE)
+                logger Mute button pressed. Toggling mute.
+                amixer set Master -q toggle
+                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
+        esac
+        ;; #]
+    button/f20) #[
+        case "$2" in
+            F20)
+                logger F20 button pressed, assuming as MicMute.
+                amixer set Capture -q toggle
+                ;;
+            *)  logger "ACPI action undefined: $1 / $2"
         esac
         ;; #]
     *) #[

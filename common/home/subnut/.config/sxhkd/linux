@@ -1,6 +1,7 @@
-{XF86MonBrightnessUp,XF86MonBrightnessDown}
-	doas light {+,-}5
-{XF86AudioRaiseVolume,XF86AudioLowerVolume}
-	amixer set Master -Mq 5%{+,-}
-{XF86AudioMute,XF86AudioMicMute}
-	amixer set {Master,Capture} -q toggle
+## The following have already been set in /etc/acpi/handler.sh
+# {XF86MonBrightnessUp,XF86MonBrightnessDown}
+# 	doas light {+,-}2
+# {XF86AudioRaiseVolume,XF86AudioLowerVolume}
+# 	amixer set Master -Mq 5%{+,-}
+# {XF86AudioMute,XF86AudioMicMute}
+# 	amixer set {Master,Capture} -q toggle
