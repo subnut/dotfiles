@@ -23,13 +23,13 @@ case "$1" in
         case "$3" in
             close)
                 logger 'LID closed'
-                if !  test -f "$(dirname "$0")/sleep_on_lid_close"
+                if !  test -f "$(dirname "$0")/lid_sleep"
                 then
-                    touch "$(dirname "$0")/sleep_on_lid_close"
-                    echo 0 > "$(dirname "$0")/sleep_on_lid_close"
-                    chmod 0666 "$(dirname "$0")/sleep_on_lid_close"
+                    touch "$(dirname "$0")/lid_sleep"
+                    echo 0 > "$(dirname "$0")/lid_sleep"
+                    chmod 0666 "$(dirname "$0")/lid_sleep"
                 fi
-                if test 1 = "$(cut -c 1 "$(dirname "$0")/sleep_on_lid_close")"
+                if test 1 = "$(cut -c 1 "$(dirname "$0")/lid_sleep")"
                 then 
                     logger Sleeping...
                     zzz
