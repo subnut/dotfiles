@@ -86,7 +86,7 @@ spawn xcape -d -t 300 -e Control_L=XF86Favorites
 test -x ~/.config/bspwm/desktop_manager ||  \
 cc ~/.config/bspwm/desktop_manager.c        \
 -o ~/.config/bspwm/desktop_manager          \
--O9 -fpie -static
+-O9 -fpie -static #-DEBUG
 
 destroy bspc subscribe report
 spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'

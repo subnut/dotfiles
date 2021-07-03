@@ -1,5 +1,15 @@
 #include <stdio.h>
 
+#ifdef EBUG
+#define DPUTC(c) fputc(c, stderr)
+#define DPUTS(s) fputs(s, stderr)
+#define DPRINTF(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define DPUTC(c)
+#define DPUTS(s)
+#define DPRINTF(...)
+#endif
+
 int
 main(void)
 {
@@ -24,6 +34,7 @@ main(void)
 		{
 			pch = cch;
 			cch = getchar();
+			DPUTC(cch);
 
 			if (cch == EOF)
 				break;
@@ -33,12 +44,14 @@ main(void)
 
 			if (cch == 'M' && pch == ':')
 			{
+				DPUTS("# AFFIRMATIVE #");
 				should_count = 1;
 				continue;
 			}
 
 			if (cch == 'm' && pch == ':')
 			{
+				DPUTS("# NEGATIVE #");
 				should_count = 0;
 				continue;
 			}
@@ -48,6 +61,7 @@ main(void)
 					count++;
 		}
 
+		DPRINTF("COUNT(%i)\n", count);
 		if (count != 1)
 			if (count > 1)
 				puts("bspc desktop next.!focused.!occupied.local -r");
