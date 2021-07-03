@@ -83,12 +83,25 @@ xmodmap -e 'add control = Control_L' && \
 spawn xcape -d -t 300 -e Control_L=XF86Favorites
 
 
-test -x ~/.config/bspwm/desktop_manager ||  \
-cc ~/.config/bspwm/desktop_manager.c        \
--o ~/.config/bspwm/desktop_manager          \
--O9 -fpie -static #-DEBUG
+(
+        DEBUG=1
 
-destroy bspc subscribe report
-spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
+        if [ "$DEBUG" = 1 ]
+        then DEBUG=-DEBUG
+        else DEBUG=""
+        fi
+
+        test -x ~/.config/bspwm/desktop_manager ||  \
+        cc ~/.config/bspwm/desktop_manager.c        \
+        -o ~/.config/bspwm/desktop_manager          \
+        -O9 -fpie -static $DEBUG                    \
+        || exit $?
+        #  ^
+        #  If cc fails to execute properly, then desktop_manager hasn't been
+        #  created.  So, exit this sub-shell without running the following commands.
+
+        destroy bspc subscribe report
+        spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
+)
 
 # vim:set et ts=4 sw=8 sts=0:
