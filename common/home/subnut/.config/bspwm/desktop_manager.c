@@ -39,14 +39,13 @@ main(void)
 
 			if (cch == 'm' && pch == ':')
 			{
-				if (should_count == 1)
-					break;
-				else
-					continue;
+				should_count = 0;
+				continue;
 			}
 
-			if ((cch == 'F' || cch == 'f') && pch == ':')
-				count++;
+			if (should_count)
+				if ((cch == 'F' || cch == 'f') && pch == ':')
+					count++;
 		}
 
 		if (count != 1)
