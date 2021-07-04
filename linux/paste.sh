@@ -28,7 +28,7 @@ then
   run git clone https://aur.archlinux.org/yay-bin.git --depth 1
   run cd yay-bin '&&' makepkg -si $PACFLAGS
   run rm -rf yay-bin
-  run yay --removemake --save
+  run yay --removemake --sudo doas --save
   run yay -S $PACFLAGS '$(cat AUR_installed_packages)'
   echo
   echo "###### XORG note ######"
