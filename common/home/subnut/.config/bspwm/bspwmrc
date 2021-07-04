@@ -9,7 +9,7 @@ destroy() { pkill -f "DISPLAY=$DISPLAY $*"; }
 spawn()
 {
         sh -c "trap 'kill \$(jobs -p)' HUP INT TERM; \
-        DISPLAY=$DISPLAY $* &> /dev/null & \
+        DISPLAY=$DISPLAY $* & \
         wait \$!" &
 }
 
@@ -20,10 +20,13 @@ bspc config border_width        10
 bspc config window_gap          20
 bspc config split_ratio         0.50
 bspc config borderless_monocle  true
-bspc config gapless_monocle     false
-bspc config single_monocle      true
+bspc config gapless_monocle     true
+bspc config single_monocle      false
 bspc config initial_polarity    first_child
 bspc config status_prefix       W:
+
+test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&
+        bspc config -d focused border_width 0
 
 bspc config normal_border_color  '#808080'
 bspc config active_border_color  '#404040'
@@ -69,18 +72,32 @@ spawn xmousepasteblock
 
 if [ ! $(uname) = OpenBSD ]
 then
-        destroy picom
+        # no need to destroy picom
         spawn picom
-        # spawn picom --experimental-backends
 fi
 
 
-xmodmap -e 'add Lock = XF86Favorites' && \
-xmodmap -e 'remove Lock = Caps_Lock' && \
-xmodmap -e 'remove control = Control_L' && \
-xmodmap -e 'keysym Caps_Lock = Control_L' && \
-xmodmap -e 'add control = Control_L' && \
+xmodmap -e 'add Lock = XF86Favorites' &&
+xmodmap -e 'remove Lock = Caps_Lock' &&
+xmodmap -e 'remove control = Control_L' &&
+xmodmap -e 'keysym Caps_Lock = Control_L' &&
+xmodmap -e 'add control = Control_L' &&
 spawn xcape -d -t 300 -e Control_L=XF86Favorites
+
+
+destroy bspc subscribe desktop_focus node_add node_remove node_transfer node_state
+spawn bspc subscribe desktop_focus node_add node_remove node_transfer node_state |
+while read LINE
+do
+    DESKTOP=$(echo "$LINE" | cut -d ' ' -f 3)
+    if [ $(bspc query -N -d $DESKTOP -n .!floating | wc -l) -gt 1 ]
+    then bspc config -d $DESKTOP border_width $(bspc config border_width)
+        bspc query -N -d $DESKTOP -n .floating | while read NODE; do
+            bspc config -n $NODE border_width 0
+        done
+    else bspc config -d $DESKTOP border_width 0
+    fi
+done &
 
 
 (
@@ -91,10 +108,10 @@ spawn xcape -d -t 300 -e Control_L=XF86Favorites
         else DEBUG=""
         fi
 
-        test -x ~/.config/bspwm/desktop_manager ||  \
-        cc ~/.config/bspwm/desktop_manager.c        \
-        -o ~/.config/bspwm/desktop_manager          \
-        -O9 -fpie -static $DEBUG                    \
+        test -x ~/.config/bspwm/desktop_manager ||
+        cc ~/.config/bspwm/desktop_manager.c \
+        -o ~/.config/bspwm/desktop_manager   \
+        -O9 -fpie -static $DEBUG             \
         || exit $?
         #  ^
         #  If cc fails to execute properly, then desktop_manager hasn't been
@@ -104,4 +121,6 @@ spawn xcape -d -t 300 -e Control_L=XF86Favorites
         spawn 'bspc subscribe report | ~/.config/bspwm/desktop_manager | /bin/sh'
 )
 
+
+wait
 # vim:set et ts=4 sw=8 sts=0:

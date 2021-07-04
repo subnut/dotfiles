@@ -4,7 +4,9 @@ alsa-utils
 amdvlk
 artix-archlinux-support
 base
+bmake
 bspwm
+cmus
 colordiff
 dash
 dhcpcd
@@ -44,6 +46,7 @@ patch
 picom
 pkgconf
 poppler
+pv
 python
 qt5ct
 ranger

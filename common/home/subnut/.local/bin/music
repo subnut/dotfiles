@@ -23,7 +23,7 @@ then echo "directory \"$MUSIC_DIR\" does not exist"; exit 1
 fi
 
 find "$MUSIC_DIR" '(' -path "*${*}*" -or -iname "*${*}*" ')' $DIRS_ONLY
-echo -n 'Play? [Y/n] ' >&2
+printf '%s' 'Play? [Y/n] ' >&2
 read ANSWER
 
 if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'

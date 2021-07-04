@@ -77,11 +77,11 @@ case "$1" in
         case "$2" in
             BRTUP)
                 logger Brightness up button pressed
-                /usr/local/bin/light +2
+                /usr/local/bin/light +5
                 ;;
             BRTDN)
                 logger Brightness down button pressed
-                /usr/local/bin/light -2
+                /usr/local/bin/light -5
                 ;;
             *)  logger "ACPI action undefined: $1 / $2"
         esac
