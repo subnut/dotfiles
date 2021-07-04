@@ -35,8 +35,8 @@ super + Escape
 	wait \$!" &
 
 # run some custom programs
-super + ctrl + Return ; {a,s,d,f,g}
-	{librewolf,falkon,otter-browser --new-window,:,firefox} &> /dev/null
+super + ctrl + Return ; {s,d,f,g}
+	{librewolf,otter-browser --new-window,falkon,firefox} &> /dev/null
 
 
 # turn off display
