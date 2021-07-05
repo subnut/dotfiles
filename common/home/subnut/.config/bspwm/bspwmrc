@@ -38,7 +38,8 @@ bspc config pointer_follows_monitor     true
 bspc config merge_overlapping_monitors  true
 bspc config ignore_ewmh_struts          true
 
-# NOTE: use `xprop | grep ^WM_NAME` to get these values
+# NOTE: to get these values, run -
+#   xprop -notype -f WM_CLASS 8u ' = $1\n' WM_CLASS
 bspc rule -a VirtualBoxVM state=floating border=off
 bspc rule -a "VirtualBox Machine" state=tiled border=off
 bspc rule -a jome state=floating border=off
@@ -51,6 +52,7 @@ bspc rule -a GParted state=floating layer=above
 bspc rule -a feh state=floating layer=above focus=on border=off
 bspc rule -a Zathura state=tiled
 bspc rule -a Surf state=tiled
+bspc rule -a SshAskpass state=floating layer=above sticky=on focus=on border=off
 
 destroy sxhkd
 spawn sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)

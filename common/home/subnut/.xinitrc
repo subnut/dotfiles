@@ -12,7 +12,7 @@ fi
 if [ ! $(uname) = OpenBSD ]
 then
 	eval $(ssh-agent -s)
-	ssh-add < /dev/null
+	ssh-add < /dev/null &
 fi
 
 export GIT_AUTH_SOCK="$SSH_AUTH_SOCK"
