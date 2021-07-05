@@ -40,4 +40,4 @@ sed -i '/^\[SettingsWindow\|^geometry=@ByteArray/d' \
   home/subnut/.config/qt5ct/qt5ct.conf
 
 
-# vim: et ts=2 sts=0 sw=0:
+# vim: et ts=2 sts=2 sw=0:

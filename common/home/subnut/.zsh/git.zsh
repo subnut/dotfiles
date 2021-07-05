@@ -1,4 +1,4 @@
-# vim:set et ts=2 sw=0 sts=0:
+# vim:set et ts=2 sw=0 sts=2:
 export GPG_TTY=$(tty)
 my_git ()
 {

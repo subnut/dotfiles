@@ -13,4 +13,4 @@ cp -rv home/subnut /home
   ln -s nothing dbus-launch
 )
 
-# vim: et ts=2 sts=0 sw=0:
+# vim: et ts=2 sts=2 sw=0:
