@@ -10,7 +10,7 @@
  *
  * When copied, the file was last modified by commit 29ab061 on 3 Sep 2019
  */
-
+// {{{
 #define MAX_LINEAR_DB_SCALE	24
 
 static inline bool use_linear_dB_scale(long dBmin, long dBmax)
@@ -87,6 +87,7 @@ double get_normalized_playback_volume(snd_mixer_elem_t *elem,
 {
 	return get_normalized_volume(elem, channel, PLAYBACK);
 }
+// }}}
 /* END Copy */
 
 
@@ -112,11 +113,12 @@ main(void)
 	snd_mixer_selem_id_set_name(sid, selem_name);
 	elem = snd_mixer_find_selem(handle, sid);
 
-	// snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
-
 	snd_mixer_selem_channel_id_t chan = 0; // 0 = left, 1 = right
 	printf("%i\n", (int)(get_normalized_playback_volume(elem, chan)*100));
 
 	snd_mixer_close(handle);
+	return 0;
 
 }
+
+/* vim: set fdm=marker: */
