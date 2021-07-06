@@ -74,8 +74,12 @@ spawn xmousepasteblock
 
 if [ ! $(uname) = OpenBSD ]
 then
-        # no need to destroy picom
+        # no need to -
+        #   destroy picom
         spawn picom
+
+        # spawn picom --blur-kern \
+        #         "$(python3 -c 'x=11;print(x,x,sep=",",end="");print(",1"*(x*x-1))')"
 fi
 
 

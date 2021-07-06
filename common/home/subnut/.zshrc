@@ -48,10 +48,6 @@ source ~/.fzf.zsh
 [ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/pacman.zsh
 
 
-test -x ~/.local/bin/light \
-	&& alias light="doas ~/.local/bin/light"
-
-
 test ! -d ~/.zsh/OMZ_snippets && \
 	mkdir -p ~/.zsh/OMZ_snippets
 source ~/.zsh/OMZ_snippets/key-bindings.zsh || \

@@ -1,7 +1,6 @@
 #!/bin/sh
 meter_length=20
-onscreen_time='1.5'
-
+onscreen_time=2   # MUST be integer
 
 cd "$(dirname "$0")"
 CC="${CC:-cc}"
@@ -20,7 +19,47 @@ while [ $i -le $meter_length ]
 do meter="-$meter"; i=$(( i+1 ))
 done
 
-(printf '%s[%s] %s%s\n' '%{l} Volume%{r}%{T2}' "$meter" '%{T1}' "${volume}% "
-sleep $onscreen_time) | ./bar -b
+# The fifo implementation is for eye-candy only.
+# It allows us to show the changed value of volume in the already-existing bar
+# (if any).  Otherwise, many bars shall stack one-over-another, causing the
+# translucent background to get darker.
+if [ ! -p ./volume_bar-fifo ]
+then
+    rm -f volume_bar-fifo
+    mkfifo volume_bar-fifo
+    trap 'rm -f volume_bar-fifo' INT HUP TERM EXIT
+    {
+        target_time=$(( $(date +%s) + "$onscreen_time" ))
+        while read LINE < volume_bar-fifo
+        do
+            echo "$LINE"      # Output the received text to bar
+            kill $(jobs -p)   # Stop the running timer
+            target_time=$(( $(date +%s) + "$onscreen_time" ))
 
-# vim: set ts=2 sts=2 sw=4:
+            # Start the timer
+            # NOTE: Starting the timer backgrounded causes it to run in a
+            # separate subshell. So, any change in $target_time in the current
+            # shell will not be carried over to the subshell.  That's why we
+            # kill the running timer and start a new one everytime we change
+            # the value of $target_time (ie. everytime we read LINE)
+            while sleep $onscreen_time
+            do test $(date +%s) -gt $target_time  &&
+                kill 0                            &&
+                rm volume_bar-fifo                &&
+                echo && sleep 0.05                &&    # Momemtarily, show blank bar
+                exit 0
+            done &
+        done
+        # Why did we momentarily show blank bar?
+        # That's 'cause, when lemonbar starts up, there is a slight delay
+        # between the (black) bar appearing, and the text appearing.
+        # But when exiting, there is no such delay.  To fix this inconsistency,
+        # we artificially introduce a delay, and show a blank bar momentarily.
+    } | ./bar -b -B '#80000000' &
+fi
+
+printf '%s[%s] %3d%% \n' '%{T1}%{l} Volume%{r}%{T2}' "$meter" "${volume}" \
+    > volume_bar-fifo
+wait
+
+# vim: set ts=2 sts=2 sw=4 et:
