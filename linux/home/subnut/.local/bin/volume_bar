@@ -1,5 +1,5 @@
 #!/bin/sh
-meter_length=20
+meter_length=20   # MUST divide 100 without any remainder (eg.5/10/20/50)
 onscreen_time=2   # MUST be integer
 
 cd "$(dirname "$0")"
@@ -9,7 +9,17 @@ test -x get_volume ||
     exit $?
 
 volume="$(./get_volume)"
-vol=$(( $volume / ( 100 / $meter_length) ))
+
+vol=$(( $volume / (100/$meter_length) ))
+
+# dividend=$volume
+# divisor=$(( 100 / meter_length ))
+# quotient=$(( dividend / divisor ))
+# remainder=$(( dividend % divisor ))
+# diff=$(( quotient - remainder ))
+# test $diff -le $divisor  &&
+#     quotient=$(( quotient + 1 ))
+# vol=$quotient
 
 i=1
 while [ $i -le $vol ]
