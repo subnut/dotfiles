@@ -1,5 +1,6 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+cp -rv home/subnut /home
 
 if ! test "$(sudo whoami)" = root
 then
@@ -10,7 +11,6 @@ then
   exit 1
 fi
 
-cp -rv home/subnut /home
 find root -type f | while read FILE
 do
   sudo cp -v "$FILE"   "/${FILE#root}"

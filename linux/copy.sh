@@ -8,9 +8,11 @@ test -d home/subnut/.local/bin  || mkdir -p home/subnut/.local/bin
 test -d root/usr/local/bin      || mkdir -p root/usr/local/bin
 test -d root/etc                || mkdir -p root/etc
 
-cp -v  ~/.zprofile          home/subnut
-cp -rv ~/.local/bin/mpv     home/subnut/.local/bin
-cp -rv ~/.local/bin/battery home/subnut/.local/bin
+cp -v  ~/.zprofile                home/subnut
+cp -rv ~/.local/bin/mpv           home/subnut/.local/bin
+cp -rv ~/.local/bin/battery       home/subnut/.local/bin
+cp -rv ~/.local/bin/volume_bar    home/subnut/.local/bin
+cp -rv ~/.local/bin/get_volume.c  home/subnut/.local/bin
 
 cp -rv /usr/local/bin/light root/usr/local/bin
 cp -v  /etc/acpi/handler.sh root/etc/acpi

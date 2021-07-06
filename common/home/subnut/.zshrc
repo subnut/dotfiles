@@ -45,7 +45,7 @@ source ~/.zsh/prompt.zsh
 source ~/.fzf.zsh
 
 
-[ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/arch.zsh
+[ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/pacman.zsh
 
 
 test -x ~/.local/bin/light \

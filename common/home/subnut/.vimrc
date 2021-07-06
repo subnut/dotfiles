@@ -268,8 +268,8 @@ Plug 'subnut/visualstar.vim'
     xmap <leader>* <Plug>(VisualstarSearchReplace)
     nmap <leader>* <Plug>(VisualstarSearchReplace)
 
-Plug 'junegunn/gv.vim', {'on': 'GV'}        " Commit browser
-Plug 'tpope/vim-fugitive', {'on': 'GV'}     " Needed by GV
+Plug 'junegunn/gv.vim', {'on': 'GV'}                " Commit browser
+Plug 'tpope/vim-fugitive', {'on': ['GV', 'Git']}    " Needed by GV
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
     let g:undotree_WindowLayout = 2
