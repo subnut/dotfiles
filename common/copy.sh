@@ -1,6 +1,10 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
+rm -rf home
+rm -rf root
+
+
 test -d home/subnut             || mkdir -p home/subnut
 test -d home/subnut/.zsh        || mkdir -p home/subnut/.zsh
 test -d home/subnut/.config     || mkdir -p home/subnut/.config

@@ -1,8 +1,13 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
+rm -rf home
+rm -rf root
+
+
 test -d root/etc                || mkdir -p root/etc
 test -d home/subnut/.local/bin  || mkdir -p home/subnut/.local/bin
+
 
 cp -v  /etc/rc.conf.local   root/etc
 cp -v  /etc/wsconsctl.conf  root/etc

@@ -2,9 +2,6 @@
 cd "$(dirname "$0")"
 echo
 
-rm -rf home
-rm -rf root
-
 echo '==== Common files ===='
 ./common/copy.sh
 echo
