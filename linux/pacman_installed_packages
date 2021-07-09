@@ -23,6 +23,7 @@ git
 grub
 gtk3
 htop
+iwd-runit
 libva-mesa-driver
 linux
 linux-firmware
