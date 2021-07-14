@@ -1,1 +1,2 @@
-sv start iwd
+#!/bin/sh
+exec sv start iwd

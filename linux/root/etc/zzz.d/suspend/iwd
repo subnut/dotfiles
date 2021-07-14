@@ -1,1 +1,2 @@
-sv stop iwd
+#!/bin/sh
+exec sv -v -w 14 down iwd
