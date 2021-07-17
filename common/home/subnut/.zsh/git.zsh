@@ -4,13 +4,14 @@ my_git ()
 {
   (
     unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
-    export SSH_AUTH_SOCK="$GIT_AUTH_SOCK"
-    export SSH_AGENT_PID="$GIT_AGENT_PID"
-    unset  GIT_AUTH_SOCK   GIT_AGENT_PID
-    git "$@"
+    export SSH_AUTH_SOCK="$GITSSH_AUTH_SOCK"
+    export SSH_AGENT_PID="$GITSSH_AGENT_PID"
+    unset GITSSH_AUTH_SOCK
+    unset GITSSH_AGENT_PID
+    git "$@"      # <- this line is the reason of the NOTE regarding the `alias git`
   )
 }
-alias git=my_git
+alias git=my_git  # NOTE: this alias MUST come after the my_git function definition
 alias g=git
 alias ga='git add'
 alias gaa='git add --all'

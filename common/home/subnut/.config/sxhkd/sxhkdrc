@@ -11,6 +11,8 @@ super + Return
 	urxvtc
 super + shift + Return
 	~/.local/bin/st
+super + ctrl + shift + Return
+	kitty --detach
 
 
 # File manager
@@ -19,7 +21,7 @@ super + {_,shift +}e
 
 # program launcher
 ctrl + space
-	~/.local/bin/dmenu_run &> /dev/null
+	export PATH="$HOME/.local/bin:$PATH"; dmenu_run &> /dev/null
 
 
 # Make sxhkd reload its configuration files
@@ -366,7 +368,7 @@ super + ctrl + {_,shift + }Tab
 # super + ctrl  + Delete:     exclude blur           current window
 #
 super + {_,ctrl +,shift +} Delete
-	PROP=_PICOM_{BLUR,ROUND,FOCUS}_EXCLUDE; \
+	PROP=_PICOM_{ROUND,BLUR,FOCUS}_EXCLUDE; \
 	WINID="$(bspc query -N -n focused)"; \
 	VAL="$(xprop -notype -id "$WINID" -f $PROP 8c '$0' $PROP | sed 's/[^[:digit:]]//g')"; \
 	if [ "$VAL" = 1 ]; \

@@ -23,7 +23,9 @@ git
 grub
 gtk3
 htop
+imagemagick
 iwd-runit
+kitty
 libva-mesa-driver
 linux
 linux-firmware
@@ -49,6 +51,7 @@ pkgconf
 poppler
 pv
 python
+python-pillow
 qt5ct
 ranger
 runit
@@ -64,6 +67,7 @@ tmux
 tree
 unzip
 vim
+w3m
 webkit2gtk
 wpa_supplicant
 wpa_supplicant-runit

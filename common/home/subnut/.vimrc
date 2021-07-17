@@ -15,7 +15,7 @@ set title
 setg nowrap
 setg fileformat=unix
 set listchars=eol:$,tab:>-
-nnoremap <C-l> <cmd>set list!<CR>
+nnoremap <leader>l <cmd>set list!<CR>
 
 com! Q  q
 com! Wq wq

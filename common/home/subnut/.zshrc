@@ -45,6 +45,7 @@ source ~/.zsh/prompt.zsh
 source ~/.fzf.zsh
 
 
+[ "$TERM" = "xterm-kitty" ]        && source ~/.zsh/kitty.zsh
 [ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/pacman.zsh
 
 

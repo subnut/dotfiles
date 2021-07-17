@@ -25,15 +25,12 @@ bspc config single_monocle      false
 bspc config initial_polarity    first_child
 bspc config status_prefix       W:
 
-test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&
-        bspc config -d focused border_width 0
-
 bspc config normal_border_color  '#808080'
 bspc config active_border_color  '#404040'
 bspc config focused_border_color '#000000'
 
 bspc config focus_follows_pointer       true
-bspc config pointer_follows_focus       true
+bspc config pointer_follows_focus       false
 bspc config pointer_follows_monitor     true
 bspc config merge_overlapping_monitors  true
 bspc config ignore_ewmh_struts          true
@@ -76,7 +73,9 @@ if [ ! $(uname) = OpenBSD ]
 then
         # no need to -
         #   destroy picom
+
         spawn picom
+        # spawn picom --experimental-backends
 
         # spawn picom --blur-kern \
         #         "$(python3 -c 'x=11;print(x,x,sep=",",end="");print(",1"*(x*x-1))')"
@@ -90,6 +89,9 @@ xmodmap -e 'keysym Caps_Lock = Control_L' &&
 xmodmap -e 'add control = Control_L' &&
 spawn xcape -d -t 300 -e Control_L=XF86Favorites
 
+
+test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&
+        bspc config -d focused border_width 0
 
 destroy bspc subscribe desktop_focus node_add node_remove node_transfer node_state
 spawn bspc subscribe desktop_focus node_add node_remove node_transfer node_state |
@@ -119,7 +121,7 @@ done &
         -o ~/.config/bspwm/desktop_manager   \
         -O9 -fpie -static $DEBUG             \
         || exit $?
-        #  ^
+        #  ↑
         #  If cc fails to execute properly, then desktop_manager hasn't been
         #  created.  So, exit this sub-shell without running the following commands.
 
