@@ -6,6 +6,7 @@ cd /tmp
 
 if test -z "$MUSIC_DIR"
 then export MUSIC_DIR="/mnt/d/Deezloader Music/"
+else export MUSIC_DIR="${MUSIC_DIR%/}/"
 fi
 
 if test -z "$MUSIC_EXEC"
