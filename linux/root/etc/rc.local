@@ -1,0 +1,10 @@
+# /etc/rc.local -- rc.local for Artix Linux
+#
+# Enter your custom commands here. It will be executed on stage 2
+# before running services.
+
+tlp start
+
+for dev in /sys/class/backlight/*
+do echo 30 > "$dev/brightness"
+done
