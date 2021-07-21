@@ -283,7 +283,7 @@ Plug 'simnalamburt/vim-mundo', {'on': 'MundoToggle'}
 Plug 'airblade/vim-gitgutter', {'on': []}   " Git diff
     au delayed_plug_load BufEnter * ++once call timer_start(0, {->execute("
                 \call plug#load('vim-gitgutter')
-                \|doau gitgutter CursorHold")})
+                \|silent! doau gitgutter CursorHold")})
     let g:gitgutter_map_keys = 0
     nmap <leader>gp <Plug>(GitGutterPreviewHunk)
     nmap <leader>ga <Plug>(GitGutterStageHunk)
