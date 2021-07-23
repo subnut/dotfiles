@@ -63,8 +63,8 @@ spawn xmousepasteblock
 # destroy xcompmgr
 # spawn xcompmgr
 
-# destroy clipster
-# spawn clipster -d
+destroy clipster
+spawn clipster -d
 
 # destroy safeeyes
 # spawn safeeyes -e
