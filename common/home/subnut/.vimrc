@@ -45,6 +45,14 @@ com! -nargs=+ -complete=shellcmd Man delcom Man | runtime ftplugin/man.vim
             \ | exe expand(<q-mods>) . ' Man ' . expand(<q-args>)
 
 
+" Bracketed paste support {{{
+if $TERM =~ 'st-256color'
+    let &t_BE = "\e[?2004h"
+    let &t_BD = "\e[?2004l"
+    exec "set t_PS=\e[200~"
+    exec "set t_PE=\e[201~"
+endif
+" }}}
 " Swap files {{{
 if !isdirectory(fnamemodify('~/.vimswap', ':p'))
     if exists('*mkdir')
