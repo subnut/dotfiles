@@ -3,6 +3,7 @@ acpid-runit
 alsa-utils
 amdvlk
 artix-archlinux-support
+artools-base
 base
 bmake
 bspwm
@@ -11,6 +12,7 @@ colordiff
 dash
 dhcpcd
 dhcpcd-runit
+dosfstools
 efibootmgr
 elogind-runit
 falkon
@@ -34,8 +36,9 @@ maim
 make
 man-db
 man-pages
-mesa-demos
+minetest
 mpv
+ncdu
 noto-fonts
 noto-fonts-emoji
 ntfs-3g
@@ -47,7 +50,6 @@ otter-browser
 pacman
 patch
 picom
-pkgconf
 poppler
 pv
 python
@@ -67,13 +69,9 @@ tree
 unzip
 vim
 w3m
-webkit2gtk
-wpa_supplicant
-wpa_supplicant-runit
 x11-ssh-askpass
 xcape
 xclip
-xcompmgr
 xcursor-premium
 xf86-video-amdgpu
 xorg-server
