@@ -21,7 +21,7 @@ super + {_,shift +}e
 
 # program launcher
 ctrl + space
-	export PATH="$HOME/.local/bin:$PATH"; dmenu_run &> /dev/null
+	dmenu_run &> /dev/null
 
 
 # Make sxhkd reload its configuration files

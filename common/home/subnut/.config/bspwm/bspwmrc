@@ -52,7 +52,7 @@ bspc rule -a Surf state=tiled
 bspc rule -a SshAskpass state=floating layer=above sticky=on focus=on border=off
 
 destroy sxhkd
-spawn sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)
+PATH="$HOME/.local/bin:$PATH" spawn sxhkd $(test $(uname) = Linux && echo ~/.config/sxhkd/linux)
 
 pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
 || spawn urxvtd -q -o
