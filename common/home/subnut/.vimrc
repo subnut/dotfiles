@@ -255,7 +255,7 @@ elseif has('unix') && executable('xclip')
             \|elseif v:event.regtype ==? 'v'
                 \| silent! call system(
                     \'xclip -in -sel clipboard',
-                    \ v:event.regcontents
+                    \ v:event.regcontents . "\n"
                 \)
             \|endif
     aug END
