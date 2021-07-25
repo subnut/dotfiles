@@ -25,6 +25,7 @@ cp -v  /etc/acpi/handler.sh root/etc/acpi
 cp -v  /etc/rc.local        root/etc
 cp -v  /etc/asound.conf     root/etc
 cp -v  /etc/doas.conf       root/etc
+cp -v  /etc/sysctl.conf     root/etc
 
 run() { echo "$*"; sh -c "$*"; }
 
