@@ -44,6 +44,9 @@ aug END
 com! -nargs=+ -complete=shellcmd Man delcom Man | runtime ftplugin/man.vim
             \ | exe expand(<q-mods>) . ' Man ' . expand(<q-args>)
 
+com! -range -bang Notab let b:Notab_et = &l:et | let &l:et = 1 | exe
+            \ (<range>?(<range>-1)?"<line1>,<line2>":"<line1>":"")."retab"
+            \."<bang>" | let &l:et = b:Notab_et | unlet b:Notab_et
 
 " Bracketed paste support {{{
 if $TERM =~ 'st-256color'

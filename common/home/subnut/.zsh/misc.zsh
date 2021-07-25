@@ -22,6 +22,7 @@ alias nvimdiff="nvim -d"
 alias nlsp="nvim --cmd 'let g:enable_lsp = 1'"
 
 
+alias vimtemp="vim +'set buftype=nowrite'"
 alias vimrc="vim ~/.vimrc"
 alias init.vim="nvim ~/.config/nvim/init.vim"
 alias bspwmrc='$EDITOR ~/.config/bspwm/bspwmrc'
