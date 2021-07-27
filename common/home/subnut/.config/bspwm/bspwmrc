@@ -115,7 +115,7 @@ do
         test "$LINE" = "node_add${LINE#node_add}" &&
                 bspc config -n focused border_width 0
         test $(bspc query -N -d focused -n .!floating | wc -l) -gt 1 &&
-                bspc config -n focused border_width $(bspc config border_width)
+                bspc config -n focused.!floating border_width $(bspc config border_width)
 done &
 
 
