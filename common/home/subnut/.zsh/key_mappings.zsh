@@ -11,7 +11,7 @@ bindkey "^I" expand_or_complete_with_dots
 ## Fancy Ctrl-Z
 fancy_ctrl_z () {
   if [[ $#BUFFER -eq 0 ]]; then
-    BUFFER="fg"
+    BUFFER=" fg"
     zle accept-line
   fi
 }
