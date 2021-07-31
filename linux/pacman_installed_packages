@@ -61,6 +61,9 @@ rxvt-unicode
 shellcheck
 socklog
 sudo
+swaybg
+swayidle
+swaylock
 sxhkd
 tcc
 tlp
@@ -69,6 +72,7 @@ tree
 unzip
 vim
 w3m
+wl-clipboard
 x11-ssh-askpass
 xcape
 xclip

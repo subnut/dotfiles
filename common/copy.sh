@@ -35,6 +35,7 @@ cp -rv ~/.config/kitty      home/subnut/.config
 cp -rv ~/.config/ranger     home/subnut/.config
 cp -rv ~/.config/clipster   home/subnut/.config
 cp -rv ~/.config/htop       home/subnut/.config
+cp -rv ~/.config/sway       home/subnut/.config
 
 cp -v  ~/.gtkrc-2.0         home/subnut
 cp -rv ~/.config/gtk-3.0    home/subnut/.config
