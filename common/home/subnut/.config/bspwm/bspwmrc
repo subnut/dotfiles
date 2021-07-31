@@ -17,7 +17,7 @@ xsetroot -cursor_name left_ptr &
 xset r rate 300 20
 
 bspc config border_width        10
-bspc config window_gap          20
+bspc config window_gap          10
 bspc config split_ratio         0.50
 bspc config borderless_monocle  true
 bspc config gapless_monocle     true
@@ -93,6 +93,25 @@ spawn xcape -d -t 300 -e Control_L=XF86Favorites
 test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&
         bspc config -d focused border_width 0
 
+destroy bspc subscribe desktop_focus node_add node_remove node_transfer node_state
+spawn bspc subscribe desktop_focus node_add node_remove node_transfer node_state |
+while read LINE
+do
+        DESKTOP=$(echo "$LINE" | cut -d ' ' -f 3)
+        if [ $(bspc query -N -d $DESKTOP -n .!floating | wc -l) -gt 1 ]
+        then
+                bspc config -d $DESKTOP window_gap $(bspc config window_gap)
+                bspc config -d $DESKTOP border_width $(bspc config border_width)
+                bspc query -N -d $DESKTOP -n .floating | while read NODE; do
+                        bspc config -n $NODE border_width 0
+                done
+        else
+                bspc config -d $DESKTOP border_width 0
+                bspc config -d $DESKTOP window_gap \
+                        $(( `bspc config window_gap` + `bspc config border_width` ))
+        fi
+done &
+
 # destroy bspc subscribe desktop_focus node_add node_remove node_transfer node_state
 # spawn bspc subscribe desktop_focus node_add node_remove node_transfer node_state |
 # while read LINE
@@ -107,16 +126,16 @@ test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&
 #         fi
 # done &
 
-destroy bspc subscribe node_focus node_add node_state desktop_focus
-spawn bspc subscribe node_focus node_add node_state desktop_focus |
-while read LINE
-do
-        bspc config -n last border_width 0
-        test "$LINE" = "node_add${LINE#node_add}" &&
-                bspc config -n focused border_width 0
-        test $(bspc query -N -d focused -n .!floating | wc -l) -gt 1 &&
-                bspc config -n focused.!floating border_width $(bspc config border_width)
-done &
+# destroy bspc subscribe node_focus node_add node_state desktop_focus
+# spawn bspc subscribe node_focus node_add node_state desktop_focus |
+# while read LINE
+# do
+#         bspc config -n last border_width 0
+#         test "$LINE" = "node_add${LINE#node_add}" &&
+#                 bspc config -n focused border_width 0
+#         test $(bspc query -N -d focused -n .!floating | wc -l) -gt 1 &&
+#                 bspc config -n focused.!floating border_width $(bspc config border_width)
+# done &
 
 
 (
