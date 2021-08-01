@@ -1,12 +1,15 @@
 if [ "$TERM" = linux ]
 then
-	printf "Start X? [Y/n] "
+	echo "1) Start X"
+	echo "2) Start Sway"
+	printf 'Which one? (1/2/[n]one) [n] '
+
 	read ANSWER
 
-	if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'
-	then
-		exec startx
-	fi
+	# if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'
+	# then
+	# 	exec startx
+	# fi
 
 	# i=0
 	# while test -f "/tmp/.X$i-lock"
@@ -22,4 +25,39 @@ then
 	# then
 	# 	exec xinit -- ":$i"
 	# fi
+
+	# printf "Start sway? [Y/n] "
+	# read ANSWER
+
+	# if test -z "$ANSWER" || echo "$ANSWER" | grep -q '^[yY]'
+	# then
+	# 	exec sway
+	# fi
+
+	case "$ANSWER" in
+		(1)
+			exec startx
+			;;
+		(2)
+			eval $(ssh-agent -s)
+			ssh-add < /dev/null
+
+			export GITSSH_AUTH_SOCK="$SSH_AUTH_SOCK"
+			export GITSSH_AGENT_PID="$SSH_AGENT_PID"
+			unset SSH_AUTH_SOCK
+			unset SSH_AGENT_PID
+
+			export XDG_RUNTIME_DIR=$HOME/.xdg_runtime_dir
+			export MOZ_ENABLE_WAYLAND=1
+			sway
+
+			export SSH_AUTH_SOCK="$GITSSH_AUTH_SOCK"
+			export SSH_AGENT_PID="$GITSSH_AGENT_PID"
+			unset GITSSH_AUTH_SOCK
+			unset GITSSH_AGENT_PID
+
+			eval $(ssh-agent -s -k)
+			ssh-add -D < /dev/null
+			;;
+	esac
 fi
