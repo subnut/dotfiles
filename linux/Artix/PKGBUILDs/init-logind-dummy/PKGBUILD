@@ -1,0 +1,9 @@
+_pkgname=init-logind
+pkgname="$_pkgname-dummy"
+pkgver=1
+pkgrel=1
+pkgdesc="A dummy package to prevent installation of $_pkgname"
+arch=('any')
+license=('MIT')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
