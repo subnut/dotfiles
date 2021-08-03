@@ -1,9 +1,10 @@
 # Taken from: https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=swayidle-git
-pkgname=swayidle
+pkgname=swayidle-no-logind
+_pkgname=swayidle
 pkgver=1.6
-pkgrel=99   # override versions from repos
+pkgrel=1
 license=('MIT')
-pkgdesc='Idle management daemon for Wayland'
+pkgdesc='Idle management daemon for Wayland, without logind support'
 makedepends=(
     'meson'
     'scdoc'
@@ -19,12 +20,12 @@ provides=('swayidle')
 conflicts=('swayidle')
 
 pkgver() {
-    cd "$pkgname"
+    cd "$_pkgname"
     git describe --tags --abbrev=0
 }
 
 build() {
-    meson "$pkgname" build \
+    meson "$_pkgname" build \
         -Dlogind=disabled \
         --prefix /usr \
         --buildtype=plain
@@ -33,8 +34,8 @@ build() {
 
 package() {
     DESTDIR="$pkgdir/" ninja -C build install
-    install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
-    install -Dm644 "$pkgname/README.md" -t "$pkgdir/usr/share/doc/$pkgname"
+    install -Dm644 "$_pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$_pkgname"
+    install -Dm644 "$_pkgname/README.md" -t "$pkgdir/usr/share/doc/$_pkgname"
 }
 
 # vim: set et nowrap sw=4 ts=4 sts=4:
