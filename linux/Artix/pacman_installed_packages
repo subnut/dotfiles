@@ -7,6 +7,7 @@ artools-base
 base
 bmake
 bspwm
+clang
 cmus
 colordiff
 dash
@@ -14,7 +15,6 @@ dhcpcd
 dhcpcd-runit
 dosfstools
 efibootmgr
-elogind-runit
 falkon
 feh
 firefox
@@ -26,6 +26,7 @@ grub
 gtk3
 htop
 imagemagick
+imv
 iwd-runit
 kitty
 libva-mesa-driver
@@ -36,8 +37,8 @@ maim
 make
 man-db
 man-pages
-minetest
 mpv
+musl
 ncdu
 noto-fonts
 noto-fonts-emoji
@@ -50,6 +51,7 @@ otter-browser
 pacman
 patch
 picom
+pkgconf
 poppler
 pv
 python
@@ -61,9 +63,9 @@ rxvt-unicode
 shellcheck
 socklog
 sudo
+sway
 swaybg
 swayidle
-swaylock
 sxhkd
 tcc
 tlp
@@ -73,6 +75,7 @@ unzip
 vim
 w3m
 wl-clipboard
+wpa_supplicant
 x11-ssh-askpass
 xcape
 xclip

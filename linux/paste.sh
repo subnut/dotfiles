@@ -23,6 +23,13 @@ run() { echo "> $*"; sh -c "$*"; }
 if test -x /usr/bin/pacman
 then
   PACFLAGS='--needed --noconfirm'
+  cd Artix
+  (
+    cd PKGBUILDs
+    for DIR in *
+    do (cd $DIR; makepkg -si $PACFLAGS;)
+    done
+  )
   run sudo pacman -Syu $PACFLAGS '$(cat pacman_installed_packages)'
   run sudo sed -i '/#Color/s/^#//' /etc/pacman.conf  # Enable color in pacman
   run git clone https://aur.archlinux.org/yay-bin.git --depth 1

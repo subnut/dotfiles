@@ -4,3 +4,5 @@ common/home/subnut/.zsh/OMZ_snippets
 common/home/subnut/.config/bspwm/desktop_manager
 common/home/subnut/.vim/black
 linux/home/subnut/.local/bin/get_volume
+linux/Artix/PKGBUILDs/*/*
+!linux/Artix/PKGBUILDs/*/PKGBUILD
