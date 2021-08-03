@@ -1,0 +1,27 @@
+pkgver=1
+pkgrel=1
+arch=('any')
+license=('MIT')
+pkgname=('polkit-dummy'
+        'elogind-dummy'
+        'init-logind-dummy')
+
+for _pkgname in ${pkgname[@]}; do eval "\
+package_${_pkgname}()
+{
+        pkgdesc=\"A dummy package to prevent installation of ${_pkgname%-dummy}\"
+        provides=(\"${_pkgname%-dummy}\")
+        conflicts=(\"${_pkgname%-dummy}\")
+}"
+done
+
+# Overrides
+package_init-logind-dummy()
+{
+        pkgdesc="A dummy package to prevent installation of init-logind"
+        provides=('init-logind' 'init-elogind')
+        conflicts=(${provides[@]})
+}
+
+
+# vim:et:
