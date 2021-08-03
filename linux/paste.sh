@@ -27,7 +27,7 @@ then
   (
     cd PKGBUILDs
     for DIR in *
-    do (cd $DIR; makepkg -si $PACFLAGS;)
+    do (cd $DIR; makepkg -fsi;)
     done
   )
   run sudo pacman -Syu $PACFLAGS '$(cat pacman_installed_packages)'
