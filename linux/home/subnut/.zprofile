@@ -47,9 +47,17 @@ then
 			unset SSH_AUTH_SOCK
 			unset SSH_AGENT_PID
 
+			pgrep -xf 'seatd -u subnut' ||
+			sh -c 'doas seatd -u subnut &' &
+
 			export XDG_RUNTIME_DIR=$HOME/.xdg_runtime_dir
 			export MOZ_ENABLE_WAYLAND=1
 			sway
+
+			# For debugging sway -
+			# Create a minimal config, save it as ~/.swayconfig,
+			# uncomment the next line, comment out the above line
+			# sway -c ~/.swayconfig -d 2> ~/sway.log
 
 			export SSH_AUTH_SOCK="$GITSSH_AUTH_SOCK"
 			export SSH_AGENT_PID="$GITSSH_AGENT_PID"
@@ -58,6 +66,8 @@ then
 
 			eval $(ssh-agent -s -k)
 			ssh-add -D < /dev/null
+
+			exit 0
 			;;
 	esac
 fi
