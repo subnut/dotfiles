@@ -32,8 +32,9 @@ run() { echo "$*"; sh -c "$*"; }
 
 if test -x /usr/bin/pacman
 then
-  run 'pacman -Qenq > Artix/pacman_installed_packages'
-  run 'pacman -Qemq > Artix/AUR_installed_packages'
+  cd Artix
+  run 'pacman -Qenq > pacman_installed_packages'
+  run 'pacman -Qemq | grep -v "$(cd PKGBUILDs; echo * | sed "s/ /\\\\|/g")" > AUR_installed_packages'
 fi
 
-# vim: et ts=2 sts=0 sw=0:
+# vim: et ts=2 sts=0 sw=0 nowrap:
