@@ -23,11 +23,12 @@ run() { echo "> $*"; sh -c "$*"; }
 if test -x /usr/bin/pacman
 then
   PACFLAGS='--needed --noconfirm'
+  yes() { while true; do echo y; done; }
   cd Artix
   (
     cd PKGBUILDs
     for DIR in *
-    do (cd $DIR; makepkg -fsi;)
+    do (cd $DIR; yes | makepkg -fsi;)
     done
   )
   run sudo pacman -Syu $PACFLAGS '$(cat pacman_installed_packages)'
