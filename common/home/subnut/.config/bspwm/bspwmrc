@@ -60,14 +60,14 @@ pgrep -f "DISPLAY=$DISPLAY urxvtd -q -o" \
 destroy xmousepasteblock
 spawn xmousepasteblock
 
-# destroy xcompmgr
-# spawn xcompmgr
-
 destroy clipster
 spawn clipster -d
 
 # destroy safeeyes
 # spawn safeeyes -e
+
+# destroy xcompmgr
+# spawn xcompmgr
 
 if [ ! $(uname) = OpenBSD ]
 then
@@ -81,13 +81,16 @@ then
         #         "$(python3 -c 'x=11;print(x,x,sep=",",end="");print(",1"*(x*x-1))')"
 fi
 
+if [ ! $(uname) = Linux ]
+        ## Not needed on linux, we're using capsctrl
+        xmodmap -e 'add Lock = XF86Favorites' &&
+        xmodmap -e 'remove Lock = Caps_Lock' &&
+        xmodmap -e 'remove control = Control_L' &&
+        xmodmap -e 'keysym Caps_Lock = Control_L' &&
+        xmodmap -e 'add control = Control_L' &&
+        spawn xcape -d -t 300 -e Control_L=XF86Favorites
+fi
 
-xmodmap -e 'add Lock = XF86Favorites' &&
-xmodmap -e 'remove Lock = Caps_Lock' &&
-xmodmap -e 'remove control = Control_L' &&
-xmodmap -e 'keysym Caps_Lock = Control_L' &&
-xmodmap -e 'add control = Control_L' &&
-spawn xcape -d -t 300 -e Control_L=XF86Favorites
 
 
 test $(bspc query -N -d focused -n .!floating | wc -l) -eq 1 &&

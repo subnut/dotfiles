@@ -19,14 +19,14 @@ cp -rv ~/.local/bin/get_volume.c  home/subnut/.local/bin
 
 cp -rv ~/.config/pacman           home/subnut/.config/pacman
 
-cp -rv /usr/local/bin/light root/usr/local/bin
-cp -rv /etc/zzz.d           root/etc
+cp -rv /usr/local/bin/light       root/usr/local/bin
+cp -rv /etc/zzz.d                 root/etc
 
-cp -v  /etc/acpi/handler.sh root/etc/acpi
-cp -v  /etc/rc.local        root/etc
-cp -v  /etc/asound.conf     root/etc
-cp -v  /etc/doas.conf       root/etc
-cp -v  /etc/sysctl.conf     root/etc
+cp -v  /etc/acpi/handler.sh       root/etc/acpi
+cp -v  /etc/rc.local              root/etc
+cp -v  /etc/asound.conf           root/etc
+cp -v  /etc/doas.conf             root/etc
+cp -v  /etc/sysctl.conf           root/etc
 
 run() { echo "$*"; sh -c "$*"; }
 
@@ -34,7 +34,18 @@ if test -x /usr/bin/pacman
 then
   cd Artix
   run 'pacman -Qenq > pacman_installed_packages'
-  run 'pacman -Qemq | grep -v "$(cd PKGBUILDs; echo * | sed "s/ /\\\\|/g")" > AUR_installed_packages'
+  echo 'Saving AUR_installed_packages'
+  bash <<EOF
+pacman -Qemq |
+grep -v "\$(
+       (
+         cd PKGBUILDs
+         for PKGBUILD in */PKGBUILD
+         do ( source \$PKGBUILD; echo \${pkgname[@]}; )
+         done
+       ) | tr '\\n' ' ' | sed -e 's/ +/ /g' | sed 's/^ *\| *$//g' | sed 's/ /\\\\|/g'
+)" > AUR_installed_packages
+EOF
 fi
 
 # vim: et ts=2 sts=0 sw=0 nowrap:

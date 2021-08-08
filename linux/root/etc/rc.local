@@ -6,5 +6,19 @@
 tlp start
 
 for dev in /sys/class/backlight/*
-do echo 30 > "$dev/brightness"
+do echo 35 > "$dev/brightness"
 done
+
+if command -v capsctrl >/dev/null
+then for DEV in /dev/input/by-path/*-event-kbd
+do capsctrl "$DEV" & disown
+done fi
+
+if command -v inotifywait >/dev/null && command -v capsctrl >/dev/null
+then
+  while inotifywait -q -e create --include '.*-event-kbd' --format '%f' /dev/input/by-path | read LINE
+  do capsctrl "/dev/input/by-path/$LINE" & disown
+  done & disown
+fi
+
+# vim: set nowrap ft=sh sw=2 sts=2 ts=2 et:

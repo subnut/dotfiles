@@ -33,6 +33,20 @@ alias ra=ranger
 alias shrug="echo -n '¯\_(ツ)_/¯' | clipcopy"
 # alias copy=clipcopy
 
+my_ssh ()
+{
+  (
+    unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
+    export SSH_AUTH_SOCK="$_SSH_AUTH_SOCK"
+    export SSH_AGENT_PID="$_SSH_AGENT_PID"
+    unset _SSH_AUTH_SOCK
+    unset _SSH_AGENT_PID
+    ssh "$@"      # <- this line is the reason of the NOTE regarding the `alias ssh`
+  )
+}
+alias ssh=my_ssh  # NOTE: this alias MUST come after the my_ssh function definition
+compdef my_ssh=ssh # Use the completion of ssh for my_ssh
+
 bspwm_delete_monitor() { #{{{
 	local monitor
 	local desktop

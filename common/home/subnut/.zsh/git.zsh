@@ -4,10 +4,10 @@ my_git ()
 {
   (
     unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
-    export SSH_AUTH_SOCK="$GITSSH_AUTH_SOCK"
-    export SSH_AGENT_PID="$GITSSH_AGENT_PID"
-    unset GITSSH_AUTH_SOCK
-    unset GITSSH_AGENT_PID
+    export SSH_AUTH_SOCK="$_SSH_AUTH_SOCK"
+    export SSH_AGENT_PID="$_SSH_AGENT_PID"
+    unset _SSH_AUTH_SOCK
+    unset _SSH_AGENT_PID
     git "$@"      # <- this line is the reason of the NOTE regarding the `alias git`
   )
 }

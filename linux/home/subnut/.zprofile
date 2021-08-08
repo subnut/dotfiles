@@ -42,16 +42,20 @@ then
 			eval $(ssh-agent -s)
 			ssh-add < /dev/null
 
-			export GITSSH_AUTH_SOCK="$SSH_AUTH_SOCK"
-			export GITSSH_AGENT_PID="$SSH_AGENT_PID"
+			export _SSH_AUTH_SOCK="$SSH_AUTH_SOCK"
+			export _SSH_AGENT_PID="$SSH_AGENT_PID"
 			unset SSH_AUTH_SOCK
 			unset SSH_AGENT_PID
 
 			pgrep -xf 'seatd -u subnut' ||
 			sh -c 'doas seatd -u subnut &' &
 
+			mkdir -p $HOME/.xdg_runtime_dir
 			export XDG_RUNTIME_DIR=$HOME/.xdg_runtime_dir
-			export MOZ_ENABLE_WAYLAND=1
+
+			export GDK_BACKEND=wayland
+			export QT_QPA_PLATFORM=wayland-egl
+
 			sway
 
 			# For debugging sway -
@@ -59,10 +63,10 @@ then
 			# uncomment the next line, comment out the above line
 			# sway -c ~/.swayconfig -d 2> ~/sway.log
 
-			export SSH_AUTH_SOCK="$GITSSH_AUTH_SOCK"
-			export SSH_AGENT_PID="$GITSSH_AGENT_PID"
-			unset GITSSH_AUTH_SOCK
-			unset GITSSH_AGENT_PID
+			export SSH_AUTH_SOCK="$_SSH_AUTH_SOCK"
+			export SSH_AGENT_PID="$_SSH_AGENT_PID"
+			unset _SSH_AUTH_SOCK
+			unset _SSH_AGENT_PID
 
 			eval $(ssh-agent -s -k)
 			ssh-add -D < /dev/null
