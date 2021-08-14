@@ -82,6 +82,7 @@ then
 fi
 
 if [ ! $(uname) = Linux ]
+then
         ## Not needed on linux, we're using capsctrl
         xmodmap -e 'add Lock = XF86Favorites' &&
         xmodmap -e 'remove Lock = Caps_Lock' &&

@@ -6,7 +6,8 @@
 
 ### Startup stuff?
 workspace number 1
-exec kitty vim ~/TODOs
+exec foot --server
+exec foot vim ~/TODOs
 
 ### Variables
 #
@@ -19,7 +20,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term kitty
+set $term footclient || foot --server
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.

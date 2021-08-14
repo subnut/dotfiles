@@ -3,22 +3,19 @@ unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
 
-let mapleader = ' '
+set title
+set smarttab
 set splitbelow
 set splitright
 set equalalways
 set helpheight=0
-set smarttab
 set updatetime=1000
 set timeoutlen=3500
-set title
-setg nowrap
-setg fileformat=unix
-set listchars=eol:$,tab:>-
-nnoremap <leader>l <cmd>set list!<CR>
 
-com! Q  q
-com! Wq wq
+setg nowrap
+setg encoding=utf-8
+setg fileformat=unix
+setg listchars=eol:$,tab:>-
 
 set mouse=n
 map <MiddleMouse>   <Nop>
@@ -26,6 +23,8 @@ map <2-MiddleMouse> <Nop>
 map <3-MiddleMouse> <Nop>
 map <4-MiddleMouse> <Nop>
 
+let mapleader = ' '
+nnoremap <leader>l <cmd>set list!<CR>
 nnoremap <leader>b :ls<CR>:b<Space>
 
 
@@ -346,16 +345,17 @@ if !empty($MY_NVIM_BG)
 endif
 
 
-if $TERM =~ 'alacritty\|st-256color' "{{{
-    if $TERM =~ 'st-256color'
-        ":h xterm-true-color
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    elseif $TERM =~ 'alacritty'
-        ":h xterm-true-color
-        let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
-        let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-    endif
+if $TERM =~ 'st-256color\|foot'
+    ":h xterm-true-color
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+elseif $TERM =~ 'alacritty'
+    ":h xterm-true-color
+    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+endif
+
+if $TERM =~ 'alacritty\|st-256color'
     set termguicolors
     colorscheme gruvbox-material
 endif
