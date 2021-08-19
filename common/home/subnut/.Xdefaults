@@ -1,6 +1,6 @@
 ! Xft.dpi: 96
 ! Xcursor.theme: capitaine-cursors-light
-Xcursor.size: 64
+! Xcursor.size: 64
 
 
 !!!!! URxvT !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -14,7 +14,10 @@ URxvt.iso14755_52: false
 URxvt.intensityStyles: false
 URxvt.skipBuiltinGlyphs: true
 
-URxvt.font:  xft:Recursive Mn Csl St:pixelsize=32.5, \
+! URxvt.font:  xft:Recursive Mn Csl St:pixelsize=32.5, \
+!              xft:MesloLGS NF:style=Regular
+
+URxvt.font:  xft:Recursive Mn Csl St:pixelsize=22.5, \
              xft:MesloLGS NF:style=Regular
 
 

@@ -48,7 +48,7 @@ XF86Display
 
 
 # clipboard selection - clipster
-super + Insert
+super + v
 	clipster -s
 
 

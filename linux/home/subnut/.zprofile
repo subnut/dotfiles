@@ -35,10 +35,9 @@ then
 	# fi
 
 	case "$ANSWER" in
-		(1)
-			exec startx
-			;;
-		(2)
+		(n*) ;;
+		(1) exec startx ;;
+		(*)
 			eval $(ssh-agent -s)
 			ssh-add < /dev/null
 
@@ -55,8 +54,11 @@ then
 
 			export GDK_BACKEND=wayland
 			export QT_QPA_PLATFORM=wayland-egl
+			unset  QT_QPA_PLATFORMTHEME
 
-			sway
+			case "$ANSWER" in
+				(2) sway ;;
+			esac
 
 			# For debugging sway -
 			# Create a minimal config, save it as ~/.swayconfig,

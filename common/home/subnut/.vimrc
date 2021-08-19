@@ -8,14 +8,21 @@ set smarttab
 set splitbelow
 set splitright
 set equalalways
+set shortmess-=S
 set helpheight=0
 set updatetime=1000
 set timeoutlen=3500
+set fileformats=unix,dos
+set spelllang=en
 
 setg nowrap
+setg spell
 setg encoding=utf-8
-setg fileformat=unix
+setg matchpairs+=<:>
 setg listchars=eol:$,tab:>-
+
+let g:showbreak_candidates = ['↳ ', '↪ ', '⤷ ', '⮡ ', '¬ ']
+let &g:showbreak = g:showbreak_candidates[2]    " NOTE: Index starts from 0
 
 set mouse=n
 map <MiddleMouse>   <Nop>
@@ -43,10 +50,12 @@ aug END
 com! -nargs=+ -complete=shellcmd Man delcom Man | runtime ftplugin/man.vim
             \ | exe expand(<q-mods>) . ' Man ' . expand(<q-args>)
 
+
+" :Notab -- :retab, but with 'expandtab' set {{{
 com! -range -bang Notab let b:Notab_et = &l:et | let &l:et = 1 | exe
             \ (<range>?(<range>-1)?"<line1>,<line2>":"<line1>":"")."retab"
             \."<bang>" | let &l:et = b:Notab_et | unlet b:Notab_et
-
+" }}}
 " Bracketed paste support {{{
 if $TERM =~ 'st-256color'
     let &t_BE = "\e[?2004h"
@@ -340,26 +349,20 @@ endif
 "}}}
 
 
-if !empty($MY_NVIM_BG)
-    let &background = $MY_NVIM_BG
-endif
-
-
+":h xterm-true-color
 if $TERM =~ 'st-256color\|foot'
-    ":h xterm-true-color
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 elseif $TERM =~ 'alacritty'
-    ":h xterm-true-color
     let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
     let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 endif
+
 
 if $TERM =~ 'alacritty\|st-256color'
     set termguicolors
     colorscheme gruvbox-material
 endif
-"}}}
 
 
 " vim:et:ts=4:sts=4:sw=0:fdm=marker

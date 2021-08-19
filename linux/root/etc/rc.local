@@ -6,7 +6,7 @@
 tlp start
 
 for dev in /sys/class/backlight/*
-do echo 35 > "$dev/brightness"
+do echo 30 > "$dev/brightness"
 done
 
 if command -v capsctrl >/dev/null
