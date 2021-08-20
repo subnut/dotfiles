@@ -1,4 +1,4 @@
 #!/bin/sh
 cd "$(dirname "$0")"
-exec ./lemonbar -f 'Recursive Sn Csl St:size=22' -f 'Recursive Mn Csl St:size=22' \
+exec ./lemonbar -f 'Recursive Sn Csl St:size=16' -f 'Recursive Mn Csl St:size=16' \
 	-B '#AA000000' -F '#FFFFFF' "$@"
