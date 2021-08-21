@@ -82,25 +82,38 @@ precmd_functions+=_exectime
 
 # Show warning if buffer empty
 EMPTY_BUFFER_WARNING_TEXT='Buffer empty!'
-accept-line() {
+zle -N accept-line
+function accept-line {
     if [[ $#BUFFER -ne 0 ]]
     then zle .accept-line
     else
+
+        # Hide cursor, show warning
         echoti civis
         print -P -f "%s$EMPTY_BUFFER_WARNING_TEXT%s" "%F{${prompt_colors[red]}}" '%f'
         echoti cub ${#EMPTY_BUFFER_WARNING_TEXT}
-        function self-insert {
-            unfunction self-insert
+
+        # Create function that resets warning
+        function _empty_buffer_warning_reset {
+            unfunction _empty_buffer_warning_reset
             printf "%${#EMPTY_BUFFER_WARNING_TEXT}s"
             echoti cub ${#EMPTY_BUFFER_WARNING_TEXT}
             echoti cnorm
+        }
+
+        # Reset the warning upon timeout
+        ( sleep 0.6; _empty_buffer_warning_reset) &!
+
+        # Reset the warning if any character typed
+        zle -N self-insert
+        function self-insert {
+            unfunction self-insert
             zle .self-insert
             zle -A .self-insert self-insert
+            _empty_buffer_warning_reset
         }
-        zle -N self-insert
     fi
 }
-zle -N accept-line
 
 
 # Show vi mode

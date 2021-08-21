@@ -58,14 +58,18 @@ source ~/.zsh/transient_prompt.zsh
 
 
 ## Others
-source ~/.fzf.zsh
-source ~/.zsh/git.zsh
 source ~/.zsh/misc.zsh
 source ~/.zsh/keybindings.zsh
 
 
-[ "$TERM" = "xterm-kitty" ]        && source ~/.zsh/kitty.zsh
-[ ${#commands[(Ie)pacman]} -eq 1 ] && source ~/.zsh/pacman.zsh
+## Source the .zsh files corresponding to the commands ...
+() {
+    local command; for command in "$@"; do
+        (( ${#commands[(Ie)$command]} )) && [[ -f ~/.zsh/${command}.zsh ]] &&
+        source ~/.zsh/${command}.zsh
+    done
+} git fzf pacman
+# ... mentioned in the previous line
 
 
 ## oh-my-zsh scripts
@@ -75,3 +79,11 @@ source ~/.zsh/OMZ_snippets/clipboard.zsh || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
     -o  ~/.zsh/OMZ_snippets/clipboard.zsh
 
+
+## Dont use kitty
+## It uses its OWN fork or glfw! If that isn't bloat, I don't know what is.
+[ "$TERM" = "xterm-kitty" ] && {
+#    alias icat='kitty +kitten icat'
+#    alias ranger="ranger --cmd 'set preview_images_method kitty'"
+    print -P '%B%U%F{1}kitty uses its own fork of glfw%f%u%b\n'
+}

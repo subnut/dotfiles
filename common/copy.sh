@@ -17,7 +17,6 @@ cp -v ~/.gitconfig          home/subnut
 cp -v ~/.pythonrc           home/subnut
 cp -v ~/.vimrc              home/subnut
 
-cp -v ~/.fzf.zsh            home/subnut
 cp -v ~/.zlogout            home/subnut
 cp -v ~/.zshenv             home/subnut
 cp -v ~/.zshrc              home/subnut
