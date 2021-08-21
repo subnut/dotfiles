@@ -1,7 +1,7 @@
 ## Transient prompt
 function _transient_prompt-zle-line-finish {
   RPROMPT=
-  PROMPT=$PROMPT_PROMPT' '
+  PROMPT=$PROMPT_PROMPT
   zle reset-prompt
 }
 function _transient_prompt-zle-line-init {

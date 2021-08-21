@@ -24,17 +24,20 @@ fi
 # PROMPT_PROMPT='%B%(?.%F{green}.%F{red})%(!.#.$)%f%b'
 
 PROMPT_PROMPT=
-PROMPT_PROMPT='%(?.%F{'${prompt_colors[green]}'}.%F{'${prompt_colors[red]}'})'
+PROMPT_PROMPT=${PROMPT_PROMPT}'%B'
+PROMPT_PROMPT=${PROMPT_PROMPT}'%(?.%F{'${prompt_colors[green]}'}.%F{'${prompt_colors[red]}'})'
 PROMPT_PROMPT=${PROMPT_PROMPT}'%(!.#.$)'
 PROMPT_PROMPT=${PROMPT_PROMPT}'%f'
+PROMPT_PROMPT=${PROMPT_PROMPT}'%b'
+PROMPT_PROMPT=${PROMPT_PROMPT}' '
 
 function set_prompt {
     PROMPT=''
-    PROMPT=${PROMPT}'%B%F{0}%~%f%b'
+    PROMPT=${PROMPT}'%B%~%b'
     PROMPT=${PROMPT}'$(prompt_exec echoti hpa $((COLUMNS)))'
     PROMPT=${PROMPT}'%(?..$(prompt_exec echoti cub ${#?})%B%F{'${prompt_colors[red]}'}%?%f%b)'
     PROMPT=${PROMPT}$'\n'
-    PROMPT=${PROMPT}${PROMPT_PROMPT}' '
+    PROMPT=${PROMPT}${PROMPT_PROMPT}
 }
 set_prompt
 
@@ -87,24 +90,30 @@ function accept-line {
     if [[ $#BUFFER -ne 0 ]]
     then zle .accept-line
     else
-
-        # Hide cursor, show warning
-        echoti civis
+        # NOTE: The next 3 commands are important when the cursor is at the
+        # last line of the terminal
+        echoti cud1
+        echoti cuu1
+        print -P -f '%s' "$PROMPT_PROMPT"
+        echoti sc
+        echoti cud 1
+        echoti hpa 0
         print -P -f "%s$EMPTY_BUFFER_WARNING_TEXT%s" "%F{${prompt_colors[red]}}" '%f'
-        echoti cub ${#EMPTY_BUFFER_WARNING_TEXT}
+        echoti ed
+        echoti rc
 
         # Create function that resets warning
         function _empty_buffer_warning_reset {
             unfunction _empty_buffer_warning_reset
+            echoti sc
+            echoti cud 1
+            echoti hpa 0
             printf "%${#EMPTY_BUFFER_WARNING_TEXT}s"
-            echoti cub ${#EMPTY_BUFFER_WARNING_TEXT}
-            echoti cnorm
+            echoti ed
+            echoti rc
         }
 
-        # Reset the warning upon timeout
-        ( sleep 0.6; _empty_buffer_warning_reset) &!
-
-        # Reset the warning if any character typed
+        # Reset the warning if any character is typed
         zle -N self-insert
         function self-insert {
             unfunction self-insert
