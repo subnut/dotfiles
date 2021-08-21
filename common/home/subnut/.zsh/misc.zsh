@@ -46,6 +46,32 @@ my_ssh ()
 }
 alias ssh=my_ssh  # NOTE: this alias MUST come after the my_ssh function definition
 compdef my_ssh=ssh # Use the completion of ssh for my_ssh
+my_rsync ()
+{
+  (
+    unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
+    export SSH_AUTH_SOCK="$_SSH_AUTH_SOCK"
+    export SSH_AGENT_PID="$_SSH_AGENT_PID"
+    unset _SSH_AUTH_SOCK
+    unset _SSH_AGENT_PID
+    rsync "$@"      # <- this line is the reason of the NOTE regarding the `alias rsync`
+  )
+}
+alias rsync=my_rsync  # NOTE: this alias MUST come after the my_rsync function definition
+compdef my_rsync=rsync # Use the completion of rsync for my_rsync
+my_scp ()
+{
+  (
+    unset  DISPLAY   # make gpg-agent use pinentry-curses instead of pinentry-gtk-2
+    export SSH_AUTH_SOCK="$_SSH_AUTH_SOCK"
+    export SSH_AGENT_PID="$_SSH_AGENT_PID"
+    unset _SSH_AUTH_SOCK
+    unset _SSH_AGENT_PID
+    scp "$@"      # <- this line is the reason of the NOTE regarding the `alias scp`
+  )
+}
+alias scp=my_scp  # NOTE: this alias MUST come after the my_scp function definition
+compdef my_scp=scp # Use the completion of scp for my_scp
 
 bspwm_delete_monitor() { #{{{
 	local monitor
