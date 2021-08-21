@@ -20,9 +20,14 @@ function _transient_prompt-send-break {
     _transient_prompt-zle-line-finish
     zle .send-break
 }
-trap '_transient_prompt-send-break' INT
 [[ ${widgets[send-break]} = builtin ]] &&
     zle -N send-break _transient_prompt-send-break
+
+_transient_prompt-precmd() { trap '_transient_prompt-send-break' INT }
+_transient_prompt-preexec() { trap - INT }
+precmd_functions+=_transient_prompt-precmd
+preexec_functions+=_transient_prompt-preexec
+
 
 
 # vim: sw=0 ts=4 sts=4 et
