@@ -52,17 +52,13 @@ precmd_functions+=title_precmd
 preexec_functions+=title_preexec
 
 
-## Prompt
-source ~/.zsh/prompt.zsh
-source ~/.zsh/transient_prompt.zsh
-
-
-## Others
-source ~/.zsh/misc.zsh
+## Other config files
 source ~/.zsh/keybindings.zsh
+source ~/.zsh/prompt.zsh
+source ~/.zsh/misc.zsh
 
 
-## Source the .zsh files corresponding to the commands ...
+## Config files corresponding to the commands ...
 () {
     local command; for command in "$@"; do
         (( ${#commands[(Ie)$command]} )) && [[ -f ~/.zsh/${command}.zsh ]] &&
@@ -79,11 +75,3 @@ source ~/.zsh/OMZ_snippets/clipboard.zsh || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
     -o  ~/.zsh/OMZ_snippets/clipboard.zsh
 
-
-## Dont use kitty
-## It uses its OWN fork or glfw! If that isn't bloat, I don't know what is.
-[ "$TERM" = "xterm-kitty" ] && {
-#    alias icat='kitty +kitten icat'
-#    alias ranger="ranger --cmd 'set preview_images_method kitty'"
-    print -P '%B%U%F{1}kitty uses its own fork of glfw%f%u%b\n'
-}

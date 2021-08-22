@@ -1,14 +1,14 @@
-# We need to run commands inside our prompts
+## We need to run commands inside our prompts
 setopt PROMPT_SUBST
 
-# Helper function to allow running commands inside $PROMPT without changing $?
+## Helper function to allow running commands inside $PROMPT without changing $?
 function prompt_exec {
     local exitcode=$?
     "$@"
     return $exitcode
 }
 
-# Array of colors to use in prompts
+## Array of colors to use in prompts
 typeset -gA prompt_colors
 if [[ ${terminfo[colors]} -eq 256 ]]; then
     prompt_colors[red]=196
@@ -41,7 +41,8 @@ function set_prompt {
 }
 set_prompt
 
-# Show execution time in RPROMPT
+
+## Show execution time in RPROMPT
 zmodload zsh/datetime
 typeset -ga _epochtime_precmd
 typeset -ga _epochtime_preexec
@@ -83,7 +84,7 @@ precmd_functions+=_exectime_precmd
 precmd_functions+=_exectime
 
 
-# Show warning if buffer empty
+## Show warning if buffer empty
 EMPTY_BUFFER_WARNING_TEXT='Buffer empty!'
 zle -N accept-line
 function accept-line {
@@ -125,7 +126,7 @@ function accept-line {
 }
 
 
-# Show vi mode
+## Show vi mode
 #function _vi_mode_show_mode {
 #    echoti sc
 #    echoti cud 1
@@ -150,6 +151,37 @@ function accept-line {
 #}
 #autoload -Uz add-zle-hook-widget
 #add-zle-hook-widget {,_vi_mode-zle-}keymap-select
+
+
+## Transient prompt
+function _transient_prompt-zle-line-finish {
+  RPROMPT=
+  PROMPT=$PROMPT_PROMPT
+  zle reset-prompt
+}
+function _transient_prompt-zle-line-init {
+  function _transient_prompt-zle-line-init {
+      set_prompt
+      PROMPT=$'\n'$PROMPT
+      zle reset-prompt
+      set_prompt
+  }
+}
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget zle-line-init   _transient_prompt-zle-line-init
+add-zle-hook-widget zle-line-finish _transient_prompt-zle-line-finish
+
+function _transient_prompt-send-break {
+    _transient_prompt-zle-line-finish
+    zle .send-break
+}
+[[ ${widgets[send-break]} = builtin ]] &&
+    zle -N send-break _transient_prompt-send-break
+
+_transient_prompt-precmd() { trap '_transient_prompt-send-break' INT }
+_transient_prompt-preexec() { trap - INT }
+precmd_functions+=_transient_prompt-precmd
+preexec_functions+=_transient_prompt-preexec
 
 
 # vim: sw=0 ts=4 sts=4 et

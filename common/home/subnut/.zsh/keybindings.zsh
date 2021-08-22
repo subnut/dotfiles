@@ -13,13 +13,12 @@ bindkey '^Z' fancy_ctrl_z
 zle -A expand-or-complete _expand-or-complete
 expand-or-complete_with_dots() {
   # print -Pn "%F{red}…%f"
-  print -Pn "%F{9}...%f"
-  zle _expand-or-complete || zle -M None
+  print -Pn "%F{1}...%f"
+  zle _expand-or-complete
+  zle reset-prompt
 }
-# zle -N expand-or-complete expand-or-complete_with_dots
+zle -N expand-or-complete expand-or-complete_with_dots
 # bindkey '^I' expand_or_complete_with_dots
-
-
 
 
 ## Keybinds
@@ -29,12 +28,10 @@ function bindkey {
     builtin bindkey -M $keymap "$@"
   done
 }
-
 [[ -n "${terminfo[khome]}" ]] && bindkey "${terminfo[khome]}" beginning-of-line       # [Home]
 [[ -n "${terminfo[kend]}"  ]] && bindkey "${terminfo[kend]}"  end-of-line             # [End]
 [[ -n "${terminfo[kcbt]}"  ]] && bindkey "${terminfo[kcbt]}"  reverse-menu-complete   # Shift+[Tab]
 [[ -n "${terminfo[kdch1]}" ]] && bindkey "${terminfo[kdch1]}" delete-char             # [Delete]
-
 unfunction bindkey
 
 
