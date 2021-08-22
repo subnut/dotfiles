@@ -1,11 +1,7 @@
-# vim: fdm=marker nowrap sw=0 ts=4 sts=4 et
-# NOTE: for any kind of unknown term, see `man 1 zshall`
-
-
-## Don't echo keypresses while zsh is starting
-if which stty 1,2>/dev/null; then
-    stty -echo
-fi
+(( ${+commands[stty]} )) && {
+    stty -echo          # Don't echo keypresses while zsh is starting
+    stty stop undef     # unbind ctrl-s from stty stop to allow fwd-i-search
+}
 
 
 ## `zsh-newuser-install`
@@ -34,7 +30,6 @@ setopt HIST_REDUCE_BLANKS       # RemoveTrailingWhiteSpace
 setopt HIST_VERIFY              # VERY IMPORTANT. `sudo !!` <enter> doesn't execute directly. instead, it just expands.
 setopt INC_APPEND_HISTORY       # immediately _append_ to HISTFILE instead of _replacing_ it _after_ the shell exits
 setopt INTERACTIVE_COMMENTS     # Allow comments using '#' in interactive mode
-bindkey "^[" vi-cmd-mode        # vi-mode
 zmodload zsh/terminfo
 typeset -ga pre{cmd,exec}_functions
 
@@ -75,3 +70,5 @@ source ~/.zsh/OMZ_snippets/clipboard.zsh || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
     -o  ~/.zsh/OMZ_snippets/clipboard.zsh
 
+
+# vim: fdm=marker nowrap sw=0 ts=4 sts=4 et

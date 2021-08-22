@@ -1,7 +1,3 @@
-## Allow fwd-i-search by unbinding ^S from stty stop
-stty stop undef
-
-
 ## Fancy Ctrl-Z
 fancy_ctrl_z () {
   if [[ $#BUFFER -eq 0 ]]; then
@@ -32,10 +28,11 @@ function bindkey {
     builtin bindkey -M $keymap "$@"
   done
 }
-[[ -n "${terminfo[khome]}" ]] && bindkey "${terminfo[khome]}" beginning-of-line       # [Home]
-[[ -n "${terminfo[kend]}"  ]] && bindkey "${terminfo[kend]}"  end-of-line             # [End]
-[[ -n "${terminfo[kcbt]}"  ]] && bindkey "${terminfo[kcbt]}"  reverse-menu-complete   # Shift+[Tab]
-[[ -n "${terminfo[kdch1]}" ]] && bindkey "${terminfo[kdch1]}" delete-char             # [Delete]
+                                  bindkey "^[" vi-cmd-mode                            # vi-mode
+[[ -n "${terminfo[khome]}" ]] &&  bindkey "${terminfo[khome]}" beginning-of-line      # [Home]
+[[ -n "${terminfo[kend]}"  ]] &&  bindkey "${terminfo[kend]}"  end-of-line            # [End]
+[[ -n "${terminfo[kcbt]}"  ]] &&  bindkey "${terminfo[kcbt]}"  reverse-menu-complete  # Shift+[Tab]
+[[ -n "${terminfo[kdch1]}" ]] &&  bindkey "${terminfo[kdch1]}" delete-char            # [Delete]
 unfunction bindkey
 
 

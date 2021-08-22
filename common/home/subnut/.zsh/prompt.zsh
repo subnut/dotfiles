@@ -97,17 +97,17 @@ function accept-line {
     if [[ $#BUFFER -ne 0 ]]
     then zle .accept-line
     else
-        # NOTE: The next 3 commands are important when the cursor is at the
-        # last line of the terminal
         echoti cud1
+        # The next two lines MUST NOT BE INTERCHANGED
+        prompt_print "$PROMPT_PROMPT"
         echoti cuu1
-        prompt_print "$PROMPT_PROMPT"   # Since cursor is on column 1 now
         echoti sc
         echoti cud 1
         echoti hpa 0
         prompt_print "%F{$EMPTY_BUFFER_WARNING_COLOR}"$EMPTY_BUFFER_WARNING_TEXT'%f'
         echoti ed
         echoti rc
+        # For the meaning of cud1,ed,hpa,... see terminfo(5)
 
         # Create function that resets warning
         function _empty_buffer_warning_reset {
@@ -130,6 +130,7 @@ function accept-line {
         }
     fi
 }
+
 
 
 ## Show vi mode
@@ -160,6 +161,8 @@ function accept-line {
 
 
 ## Transient prompt
+# XXX: Sigh. Wish this was better.
+# Also see https://reddit.com/r/zsh/comments/k3ckmi/standalone_version_of_p10ks_transient_prompt
 function _transient_prompt-zle-line-finish {
     RPROMPT=
     PROMPT=$PROMPT_PROMPT
@@ -176,24 +179,52 @@ autoload -Uz add-zle-hook-widget
 add-zle-hook-widget zle-line-init   _transient_prompt-zle-line-init
 add-zle-hook-widget zle-line-finish _transient_prompt-zle-line-finish
 
+# Trap SIGINT
+precmd_functions+=_transient_prompt_add_TRAPINT
+function _transient_prompt_add_TRAPINT {
+    TRAPINT() { _transient_prompt-zle-line-finish; return $(( $1 + 128 )); }
+}
+
+# Remove leading space from $PROMPT when clear-screen
+zle -N clear-screen _transient_prompt-clear-screen
 function _transient_prompt-clear-screen {
-    set_prompt
+    PROMPT=${PROMPT#$'\n'}
     zle .clear-screen
 }
-[[ ${widgets[clear-screen]} = builtin ]] &&
-    zle -N clear-screen _transient_prompt-clear-screen
 
-function _transient_prompt-send-break {
-    _transient_prompt-zle-line-finish
-    zle .send-break
+
+
+###############  HERE BE DRAGONS  ###############
+typeset -A stty;
+() {
+    local IFS='='
+    stty -a < $TTY | while read -d ';' entry
+    do (( ! ${#entry:/*=*/} )) && () { stty[${1// /}]=${2// /} }  ${=entry//$'\n'/}
+    done
 }
-[[ ${widgets[send-break]} = builtin ]] &&
-    zle -N send-break _transient_prompt-send-break
 
-_transient_prompt-precmd() { trap '_transient_prompt-send-break' INT }
-_transient_prompt-preexec() { trap - INT }
-precmd_functions+=_transient_prompt-precmd
-preexec_functions+=_transient_prompt-preexec
+# TODO: inside _transient_prompt_isearch_interrupted, add some code that makes
+# CTRL-R CTRL-C behave as it does on `PROMPT='%? %% ' zsh -f`
+eval '
+zle-isearch-update() {
+    bindkey -M main '${stty[intr]}' _transient_prompt_isearch_interrupted
+    '${functions[zle-isearch-update]}'
+    stty intr undef <> $TTY
+}
+_transient_prompt_isearch_interrupted() {
+    bindkey -M main -r "'${stty[intr]}'"
+    stty intr "'${stty[intr]}'" <> $TTY
+}
+zle-isearch-exit() {
+    bindkey -M main -r "'${stty[intr]}'"
+    '${functions[zle-isearch-exit]}'
+    stty intr "'${stty[intr]}'" <> $TTY
+}
+'
+zle -N zle-isearch-update
+zle -N zle-isearch-exit
+zle -N _transient_prompt_isearch_interrupted
+unset stty
 
 
 # vim: sw=0 ts=4 sts=4 et
