@@ -8,6 +8,11 @@ function prompt_exec {
     return $exitcode
 }
 
+## Helper function to print something with prompt expansion
+function prompt_print {
+    print -n -- "${(%)*}"
+}
+
 ## Array of colors to use in prompts
 typeset -gA prompt_colors
 if [[ ${terminfo[colors]} -eq 256 ]]; then
@@ -86,6 +91,7 @@ precmd_functions+=_exectime
 
 ## Show warning if buffer empty
 EMPTY_BUFFER_WARNING_TEXT='Buffer empty!'
+EMPTY_BUFFER_WARNING_COLOR=${prompt_colors[red]}
 zle -N accept-line
 function accept-line {
     if [[ $#BUFFER -ne 0 ]]
@@ -95,11 +101,11 @@ function accept-line {
         # last line of the terminal
         echoti cud1
         echoti cuu1
-        print -P -f '%s' "$PROMPT_PROMPT"
+        prompt_print "$PROMPT_PROMPT"   # Since cursor is on column 1 now
         echoti sc
         echoti cud 1
         echoti hpa 0
-        print -P -f "%s$EMPTY_BUFFER_WARNING_TEXT%s" "%F{${prompt_colors[red]}}" '%f'
+        prompt_print "%F{$EMPTY_BUFFER_WARNING_COLOR}"$EMPTY_BUFFER_WARNING_TEXT'%f'
         echoti ed
         echoti rc
 
@@ -132,7 +138,7 @@ function accept-line {
 #    echoti cud 1
 #    echoti hpa 0
 #    echoti el
-#    (( ${#1} )) && print -P -f "%s$1%s" '%B' '%b'
+#    (( ${#1} )) && prompt_print '%B'$1'%b'
 #    echoti rc
 #}
 #
@@ -155,21 +161,27 @@ function accept-line {
 
 ## Transient prompt
 function _transient_prompt-zle-line-finish {
-  RPROMPT=
-  PROMPT=$PROMPT_PROMPT
-  zle reset-prompt
+    RPROMPT=
+    PROMPT=$PROMPT_PROMPT
+    zle reset-prompt
 }
 function _transient_prompt-zle-line-init {
-  function _transient_prompt-zle-line-init {
-      set_prompt
-      PROMPT=$'\n'$PROMPT
-      zle reset-prompt
-      set_prompt
-  }
+    function _transient_prompt-zle-line-init {
+        set_prompt
+        PROMPT=$'\n'$PROMPT
+        zle reset-prompt
+    }
 }
 autoload -Uz add-zle-hook-widget
 add-zle-hook-widget zle-line-init   _transient_prompt-zle-line-init
 add-zle-hook-widget zle-line-finish _transient_prompt-zle-line-finish
+
+function _transient_prompt-clear-screen {
+    set_prompt
+    zle .clear-screen
+}
+[[ ${widgets[clear-screen]} = builtin ]] &&
+    zle -N clear-screen _transient_prompt-clear-screen
 
 function _transient_prompt-send-break {
     _transient_prompt-zle-line-finish

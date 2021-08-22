@@ -1,3 +1,7 @@
+## Allow fwd-i-search by unbinding ^S from stty stop
+stty stop undef
+
+
 ## Fancy Ctrl-Z
 fancy_ctrl_z () {
   if [[ $#BUFFER -eq 0 ]]; then
