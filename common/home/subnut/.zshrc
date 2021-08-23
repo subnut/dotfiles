@@ -8,7 +8,6 @@
 HISTFILE=~/.zsh_history
 HISTSIZE=30000
 SAVEHIST=30000
-bindkey -e
 
 
 ## `compinstall`
