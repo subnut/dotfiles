@@ -1,6 +1,6 @@
 (( ${+commands[stty]} )) && {
-    stty -echo          # Don't echo keypresses while zsh is starting
-    stty stop undef     # unbind ctrl-s from stty stop to allow fwd-i-search
+    <>$TTY stty -echo          # Don't echo keypresses while zsh is starting
+    <>$TTY stty stop undef     # unbind ctrl-s from stty stop to allow fwd-i-search
 }
 
 
@@ -48,8 +48,9 @@ preexec_functions+=title_preexec
 
 ## Other config files
 source ~/.zsh/keybindings.zsh
-source ~/.zsh/prompt.zsh
 source ~/.zsh/misc.zsh
+source ~/.zsh/prompt.zsh
+source ~/.zsh/transient_prompt.zsh
 
 
 ## Config files corresponding to the commands ...

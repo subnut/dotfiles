@@ -47,7 +47,7 @@ then
 			unset SSH_AGENT_PID
 
 			pgrep -xf 'seatd -u subnut' ||
-			sh -c 'doas seatd -u subnut &' &
+			doas seatd -u subnut &!
 
 			mkdir -p $HOME/.xdg_runtime_dir
 			export XDG_RUNTIME_DIR=$HOME/.xdg_runtime_dir

@@ -57,10 +57,11 @@ function set_prompt {
 }
 set_prompt
 
-function shorten_prompt {
-    RPROMPT=
-    PROMPT=$(prompt_prompt transient)
-}
+# function shorten_prompt {
+#     RPROMPT=
+#     PROMPT=$(prompt_prompt transient)
+# }
+PROMPT_TRANSIENT=$(prompt_prompt transient)
 
 
 ## Show execution time in RPROMPT
@@ -177,6 +178,7 @@ function accept-line {
 
 
 
+return
 ## Transient prompt
 # See: https://reddit.com/r/zsh/comments/k3ckmi/standalone_version_of_p10ks_transient_prompt
 function _transient_prompt-zle-line-finish {
