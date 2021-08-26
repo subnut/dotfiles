@@ -49,6 +49,7 @@ bindkey   kclr    clear-screen
 (( ${+functions[bindkey]} ))  &&
   unfunction bindkey
 
+bindkey '^[[200~' bracketed-paste
 
 # bindkey '^A'
 # bindkey '^B'
@@ -60,7 +61,7 @@ bindkey '^G'  send-break            # zsh default
 bindkey '^H'  backward-delete-char  # BS  (Backspace)
 bindkey '^I'  expand-or-complete    # HT  (Horizontal Tab)
 bindkey '^J'  accept-line           # LF  (Line feed)
-# bindkey '^K'
+bindkey '^K'  kill-line             # zsh default
 bindkey '^L'  clear-screen
 bindkey '^M'  accept-line           # CR  (Carriage Return)
 bindkey '^N'  down-line-or-search

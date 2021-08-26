@@ -8,15 +8,15 @@ set smarttab
 set splitbelow
 set splitright
 set equalalways
+set spelllang=en
 set shortmess-=S
 set helpheight=0
 set updatetime=1000
 set timeoutlen=3500
 set fileformats=unix,dos
-set spelllang=en
+set ignorecase smartcase
 
 setg nowrap
-setg spell
 setg encoding=utf-8
 setg matchpairs+=<:>
 setg listchars=eol:$,tab:>-
@@ -281,14 +281,15 @@ aug delayed_plug_load
     au!
 aug END
 call plug#begin('~/.config/nvim/plugged')
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'subnut/visualstar.vim'
     au delayed_plug_load BufEnter * ++once
                 \ call timer_start(0, {->plug#load('visualstar.vim')})
     xmap <leader>* <Plug>(VisualstarSearchReplace)
     nmap <leader>* <Plug>(VisualstarSearchReplace)
 
-Plug 'junegunn/gv.vim', {'on': 'GV'}                " Commit browser
-Plug 'tpope/vim-fugitive', {'on': ['GV', 'Git']}    " Needed by GV
+Plug 'junegunn/gv.vim', {'on': 'GV'}                    " Commit browser
+Plug 'tpope/vim-fugitive', {'on': ['GV', 'Git', 'G']}   " Needed by GV
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
     let g:undotree_WindowLayout = 2

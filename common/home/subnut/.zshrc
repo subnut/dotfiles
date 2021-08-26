@@ -55,7 +55,7 @@ source ~/.zsh/misc.zsh
 ## Config files corresponding to the commands ...
 () {
     local command; for command in "$@"; do
-        (( ${#commands[(Ie)$command]} )) && [[ -f ~/.zsh/${command}.zsh ]] &&
+        (( ${+commands[$command]} )) && [[ -f ~/.zsh/${command}.zsh ]] &&
         source ~/.zsh/${command}.zsh
     done
 } git fzf pacman

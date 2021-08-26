@@ -28,23 +28,39 @@ fi
 # PROMPT_PROMPT='%F{'$${prompt_colors[grey]}'}$%f'
 # PROMPT_PROMPT='%B%(?.%F{green}.%F{red})%(!.#.$)%f%b'
 
-PROMPT_PROMPT=
-PROMPT_PROMPT=${PROMPT_PROMPT}'%B'
-PROMPT_PROMPT=${PROMPT_PROMPT}'%(?.%F{'${prompt_colors[green]}'}.%F{'${prompt_colors[red]}'})'
-PROMPT_PROMPT=${PROMPT_PROMPT}'%(!.#.$)'
-PROMPT_PROMPT=${PROMPT_PROMPT}'%f'
-PROMPT_PROMPT=${PROMPT_PROMPT}'%b'
-PROMPT_PROMPT=${PROMPT_PROMPT}' '
+function prompt_prompt {
+    local prompt
+    prompt=
+    if (( ${#1} )) && [[ $1 = transient ]]
+    then
+        prompt+="%F{${prompt_colors[grey]}}"
+        prompt+='%(!.#.$)'
+        prompt+='%f'
+    else
+        prompt+='%B'
+        prompt+='%(?.%F{'${prompt_colors[green]}'}.%F{'${prompt_colors[red]}'})'
+        prompt+='%(!.#.$)'
+        prompt+='%f'
+        prompt+='%b'
+    fi
+    prompt+=' '
+    print -n -- "$prompt"
+}
 
 function set_prompt {
-    PROMPT=''
+    PROMPT=
     PROMPT=${PROMPT}'%B%~%b'
     PROMPT=${PROMPT}'$(prompt_exec echoti hpa $((COLUMNS)))'
     PROMPT=${PROMPT}'%(?..$(prompt_exec echoti cub ${#?})%B%F{'${prompt_colors[red]}'}%?%f%b)'
     PROMPT=${PROMPT}$'\n'
-    PROMPT=${PROMPT}${PROMPT_PROMPT}
+    PROMPT=${PROMPT}$(prompt_prompt)
 }
 set_prompt
+
+function shorten_prompt {
+    RPROMPT=
+    PROMPT=$(prompt_prompt transient)
+}
 
 
 ## Show execution time in RPROMPT
@@ -99,7 +115,7 @@ function accept-line {
     else
         echoti cud1
         # The next two lines MUST NOT BE INTERCHANGED
-        prompt_print "$PROMPT_PROMPT"
+        prompt_print "$(prompt_prompt)"
         echoti cuu1
         echoti sc
         echoti cud 1
@@ -160,13 +176,13 @@ function accept-line {
 #add-zle-hook-widget {,_vi_mode-zle-}keymap-select
 
 
+
 ## Transient prompt
-# XXX: Sigh. Wish this was better.
-# Also see https://reddit.com/r/zsh/comments/k3ckmi/standalone_version_of_p10ks_transient_prompt
+# See: https://reddit.com/r/zsh/comments/k3ckmi/standalone_version_of_p10ks_transient_prompt
 function _transient_prompt-zle-line-finish {
-    RPROMPT=
-    PROMPT=$PROMPT_PROMPT
+    shorten_prompt
     zle reset-prompt
+    _transient_prompt_del_TRAPINT
 }
 function _transient_prompt-zle-line-init {
     function _transient_prompt-zle-line-init {
@@ -179,11 +195,6 @@ autoload -Uz add-zle-hook-widget
 add-zle-hook-widget zle-line-init   _transient_prompt-zle-line-init
 add-zle-hook-widget zle-line-finish _transient_prompt-zle-line-finish
 
-# Trap SIGINT
-precmd_functions+=_transient_prompt_add_TRAPINT
-function _transient_prompt_add_TRAPINT {
-    TRAPINT() { _transient_prompt-zle-line-finish; return $(( $1 + 128 )); }
-}
 
 # Remove leading space from $PROMPT when clear-screen
 zle -N clear-screen _transient_prompt-clear-screen
@@ -193,38 +204,77 @@ function _transient_prompt-clear-screen {
 }
 
 
+# Trap SIGINT
+function _transient_prompt_add_TRAPINT {
+    TRAPINT() { _transient_prompt-zle-line-finish; return $(( $1 + 128 )); }
+}
+function _transient_prompt_del_TRAPINT {
+    (( ${+functions[TRAPINT]} )) && unfunction TRAPINT
+}
+precmd_functions+=_transient_prompt_add_TRAPINT
+# preexec_functions+=_transient_prompt_del_TRAPINT  # Already in _transient_prompt-zle-line-finish
+
+
+# interactive search
+zle -N zle-isearch-update
+function zle-isearch-update {
+    _transient_prompt_del_TRAPINT
+    zle -N self-insert
+    function self-insert {
+        _transient_prompt_add_TRAPINT
+        unfunction self-insert
+        zle .self-insert
+        zle -A .self-insert self-insert
+    }
+}
+
 
 ###############  HERE BE DRAGONS  ###############
-typeset -A stty;
-() {
-    local IFS='='
-    stty -a < $TTY | while read -d ';' entry
-    do (( ! ${#entry:/*=*/} )) && () { stty[${1// /}]=${2// /} }  ${=entry//$'\n'/}
-    done
-}
+#get_stty() {
+#    typeset -A stty;
+#    local IFS='='
+#    stty -a < $TTY | while read -d ';' entry
+#    do (( ! ${#entry:/*=*/} )) && () { stty[${1// /}]=${2// /} }  ${=entry//$'\n'/}
+#    done
+#}; get_stty
+
+
+#zle -N history-incremental-search-forward
+#zle -N history-incremental-search-backward
+#function history-incremental-search-forward {
+#    unfunction TRAPINT
+#    zle -w .history-incremental-search-forward "$BUFFER"
+#    prompt_exec _transient_prompt_add_TRAPINT
+#}
+#function history-incremental-search-backward {
+#    unfunction TRAPINT
+#    trap 'trap - INT; sleep 1 && kill -INT $$' INT
+#    zle .history-incremental-search-backward "$BUFFER"
+#    prompt_exec _transient_prompt_add_TRAPINT
+#}
 
 # TODO: inside _transient_prompt_isearch_interrupted, add some code that makes
 # CTRL-R CTRL-C behave as it does on `PROMPT='%? %% ' zsh -f`
-eval '
-zle-isearch-update() {
-    bindkey -M main '${stty[intr]}' _transient_prompt_isearch_interrupted
-    '${functions[zle-isearch-update]}'
-    stty intr undef <> $TTY
-}
-_transient_prompt_isearch_interrupted() {
-    bindkey -M main -r "'${stty[intr]}'"
-    stty intr "'${stty[intr]}'" <> $TTY
-}
-zle-isearch-exit() {
-    bindkey -M main -r "'${stty[intr]}'"
-    '${functions[zle-isearch-exit]}'
-    stty intr "'${stty[intr]}'" <> $TTY
-}
-'
-zle -N zle-isearch-update
-zle -N zle-isearch-exit
-zle -N _transient_prompt_isearch_interrupted
-unset stty
+#eval '
+#zle-isearch-update() {
+#    bindkey -M main '${stty[intr]}' _transient_prompt_isearch_interrupted
+#    '${functions[zle-isearch-update]}'
+#    stty intr undef <> $TTY
+#}
+#_transient_prompt_isearch_interrupted() {
+#    bindkey -M main -r "'${stty[intr]}'"
+#    stty intr "'${stty[intr]}'" <> $TTY
+#}
+#zle-isearch-exit() {
+#    bindkey -M main -r "'${stty[intr]}'"
+#    '${functions[zle-isearch-exit]}'
+#    stty intr "'${stty[intr]}'" <> $TTY
+#}
+#'
+#zle -N zle-isearch-update
+#zle -N zle-isearch-exit
+#zle -N _transient_prompt_isearch_interrupted
 
+#unset stty
 
 # vim: sw=0 ts=4 sts=4 et

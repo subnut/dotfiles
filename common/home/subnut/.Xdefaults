@@ -18,7 +18,7 @@ URxvt.skipBuiltinGlyphs: true
 !              xft:MesloLGS NF:style=Regular
 
 URxvt.font:  xft:Recursive Mn Csl St:pixelsize=22.5, \
-             xft:MesloLGS NF:style=Regular
+             xft:Symbols Nerd Font
 
 
 ! The following colors have been taken from
