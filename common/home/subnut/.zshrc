@@ -47,28 +47,28 @@ preexec_functions+=title_preexec
 
 
 ## Other config files
-source ~/.zsh/keybindings.zsh
-source ~/.zsh/misc.zsh
-source ~/.zsh/prompt.zsh
-source ~/.zsh/transient_prompt.zsh
+ZDOTDIR=${ZDOTDIR-~}
+source $ZDOTDIR/.zsh/misc.zsh
+source $ZDOTDIR/.zsh/prompt.zsh
+source $ZDOTDIR/.zsh/keybindings.zsh
 
 
 ## Config files corresponding to the commands ...
 () {
     local command; for command in "$@"; do
-        (( ${+commands[$command]} )) && [[ -f ~/.zsh/${command}.zsh ]] &&
-        source ~/.zsh/${command}.zsh
+        (( ${+commands[$command]} )) && [[ -f $ZDOTDIR/.zsh/${command}.zsh ]] &&
+        source $ZDOTDIR/.zsh/${command}.zsh
     done
 } git fzf pacman
 # ... mentioned in the previous line
 
 
 ## oh-my-zsh scripts
-test ! -d ~/.zsh/OMZ_snippets && \
-    mkdir -p ~/.zsh/OMZ_snippets
-source ~/.zsh/OMZ_snippets/clipboard.zsh || \
+[[ -d $ZDOTDIR/.zsh/OMZ_snippets ]] || mkdir -p $ZDOTDIR/.zsh/OMZ_snippets
+[[ -f $ZDOTDIR/.zsh/OMZ_snippets/clipboard.zsh ]] || \
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
-    -o  ~/.zsh/OMZ_snippets/clipboard.zsh
+    -o $ZDOTDIR/.zsh/OMZ_snippets/clipboard.zsh
+source $ZDOTDIR/.zsh/OMZ_snippets/clipboard.zsh
 
 
 # vim: fdm=marker nowrap sw=0 ts=4 sts=4 et
