@@ -47,7 +47,7 @@ preexec_functions+=title_preexec
 
 
 ## Other config files
-ZDOTDIR=${ZDOTDIR-~}
+export ZDOTDIR=${ZDOTDIR-$HOME}
 source $ZDOTDIR/.zsh/misc.zsh
 source $ZDOTDIR/.zsh/prompt.zsh
 source $ZDOTDIR/.zsh/keybindings.zsh
