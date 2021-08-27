@@ -171,9 +171,17 @@ function accept-line {
 [[ -c /dev/null ]]  ||  return
 zmodload zsh/system ||  return
 
+typeset -g _transient_prompt_newline=
 function _transient_prompt_set_prompt {
     set_prompt
+    PROMPT='$_transient_prompt_newline'$PROMPT
 }; _transient_prompt_set_prompt
+
+zle -N clear-screen _transient_prompt_widget-clear-screen
+function _transient_prompt_widget-clear-screen {
+    _transient_prompt_newline=
+    zle .clear-screen
+}
 
 zle -N send-break _transient_prompt_widget-send-break
 function _transient_prompt_widget-send-break {
@@ -190,7 +198,6 @@ function _transient_prompt_widget-zle-line-finish {
     zle && PROMPT=$TRANSIENT_PROMPT RPROMPT= zle reset-prompt && zle -R
 }
 
-
 function _transient_prompt_restore_prompt {
     exec {1}>&-
     (( ${+1} )) && zle -F $1
@@ -205,9 +212,17 @@ function _transient_prompt_restore_prompt {
     do_nothing() {true}
     precmd_functions=(do_nothing)
 }
+
 precmd_functions+=_transient_prompt_precmd
 function _transient_prompt_precmd {
+    # We define _transient_prompt_precmd in this way because we don't want
+    # _transient_prompt_newline to be defined on the very first precmd.
     TRAPINT() {zle && _transient_prompt_widget-zle-line-finish; return $(( 128 + $1 ))}
+    function _transient_prompt_precmd {
+        TRAPINT() {zle && _transient_prompt_widget-zle-line-finish; return $(( 128 + $1 ))}
+        _transient_prompt_newline=$'\n'
+    }
 }
+
 
 # vim: sw=0 ts=4 sts=4 et
