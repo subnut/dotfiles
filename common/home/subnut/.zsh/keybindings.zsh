@@ -33,10 +33,10 @@ function bindkey {
   (( ${+terminfo[$1]} )) && builtin bindkey "${terminfo[$1]}" "$2"
 }
 
-# bindkey   kcuu1   up-line-or-history      # Up
-# bindkey   kcud1   down-line-or-history    # Down
-bindkey   kcuu1   up-line-or-search       # Up
-bindkey   kcud1   down-line-or-search     # Down
+# bindkey   kcuu1   up-line-or-search       # Up
+# bindkey   kcud1   down-line-or-search     # Down
+bindkey   kcuu1   up-line-or-history      # Up
+bindkey   kcud1   down-line-or-history    # Down
 bindkey   kcub1   backward-char           # Left
 bindkey   kcuf1   forward-char            # Right
 bindkey   kend    end-of-line             # End
@@ -64,9 +64,9 @@ bindkey '^J'  accept-line           # LF  (Line feed)
 bindkey '^K'  kill-line             # zsh default
 bindkey '^L'  clear-screen
 bindkey '^M'  accept-line           # CR  (Carriage Return)
-bindkey '^N'  down-line-or-search
+bindkey '^N'  down-line-or-history
 bindkey '^O'  vi-open-line-below    # Madlad
-bindkey '^P'  up-line-or-search
+bindkey '^P'  up-line-or-history
 bindkey '^Q'  vi-quoted-insert
 bindkey '^R'  history-incremental-search-backward   # zsh default
 bindkey '^S'  history-incremental-search-forward    # zsh default
@@ -77,7 +77,35 @@ bindkey '^W'  backward-kill-word
 # bindkey '^X'
 bindkey '^Y'  redo
 bindkey '^Z'  undo
-bindkey '^['  vi-cmd-mode           # ESC (Escape)
+
+bindkey '^['    vi-cmd-mode           # ESC (Escape)
+bindkey '^[^['  vi-cmd-mode           # ESC ESC
+
+if [[ $TERM = rxvt-unicode-256color ]]
+then
+  bindkey '^[Od' backward-word
+  bindkey '^[Oc' forward-word
+else
+  bindkey '^[[1;5D' backward-word
+  bindkey '^[[1;5C' forward-word
+fi
+
+
+## Modified widgets
+() {
+  local direction
+  for direction in {back,for}ward; do
+    zle -N history-incremental-search-$direction
+    eval history-incremental-search-$direction'() {
+      local text=${BUFFER## }
+      local leading_spaces=${BUFFER%$text}
+      BUFFER=
+      zle .history-incremental-search-'$direction' $text
+      BUFFER=$leading_spaces$BUFFER
+    }'
+  done
+}
+
 
 
 
@@ -96,4 +124,4 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   add-zle-hook-widget zle-line-finish _rmkx
 fi
 
-# vim: nowrap sw=0 ts=2 sts=2 et
+# vim: nowrap sw=0 ts=2 sts=2 et iskeyword+=-

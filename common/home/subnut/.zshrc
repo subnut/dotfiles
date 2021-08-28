@@ -1,9 +1,3 @@
-(( ${+commands[stty]} )) && {
-    <>$TTY stty -echo          # Don't echo keypresses while zsh is starting
-    <>$TTY stty stop undef     # unbind ctrl-s from stty stop to allow fwd-i-search
-}
-
-
 ## `zsh-newuser-install`
 HISTFILE=~/.zsh_history
 HISTSIZE=30000
@@ -69,6 +63,14 @@ source $ZDOTDIR/.zsh/keybindings.zsh
     curl -L http://github.com/ohmyzsh/ohmyzsh/raw/master/lib/clipboard.zsh \
     -o $ZDOTDIR/.zsh/OMZ_snippets/clipboard.zsh
 source $ZDOTDIR/.zsh/OMZ_snippets/clipboard.zsh
+
+
+## Terminal compatibility/tweaks
+(( ${+commands[stty]} )) && {
+    <>$TTY stty -echo                   # Don't echo keypresses while zsh is starting
+    <>$TTY stty stop undef              # unbind ctrl-s from stty stop to allow fwd-i-search
+    <>$TTY stty erase ${terminfo[kbs]}  # vim :term has ^H in $terminfo[kbs] but sets ^? in stty erase
+}
 
 
 # vim: fdm=marker nowrap sw=0 ts=4 sts=4 et

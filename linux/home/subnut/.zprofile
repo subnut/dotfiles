@@ -37,7 +37,7 @@ then
 	case "$ANSWER" in
 		(n*) ;;
 		(1) exec startx ;;
-		(*)
+		(2)
 			eval $(ssh-agent -s)
 			ssh-add < /dev/null
 
