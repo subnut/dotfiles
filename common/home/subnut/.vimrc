@@ -5,6 +5,7 @@ source $VIMRUNTIME/defaults.vim
 
 set title
 set smarttab
+set smartcase   " NOTE: by default ignorecase is off, so this is meaningless
 set splitbelow
 set splitright
 set equalalways
@@ -14,7 +15,6 @@ set helpheight=0
 set updatetime=1000
 set timeoutlen=3500
 set fileformats=unix,dos
-set ignorecase smartcase
 
 setg nowrap
 setg encoding=utf-8
@@ -57,7 +57,7 @@ com! -range -bang Notab let b:Notab_et = &l:et | let &l:et = 1 | exe
             \."<bang>" | let &l:et = b:Notab_et | unlet b:Notab_et
 " }}}
 " Bracketed paste support {{{
-if $TERM =~ 'st-256color'
+if $TERM =~ 'st-256color\|foot'
     let &t_BE = "\e[?2004h"
     let &t_BD = "\e[?2004l"
     exec "set t_PS=\e[200~"
@@ -281,15 +281,14 @@ aug delayed_plug_load
     au!
 aug END
 call plug#begin('~/.config/nvim/plugged')
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'subnut/visualstar.vim'
     au delayed_plug_load BufEnter * ++once
                 \ call timer_start(0, {->plug#load('visualstar.vim')})
     xmap <leader>* <Plug>(VisualstarSearchReplace)
     nmap <leader>* <Plug>(VisualstarSearchReplace)
 
-Plug 'junegunn/gv.vim', {'on': 'GV'}                    " Commit browser
-Plug 'tpope/vim-fugitive', {'on': ['GV', 'Git', 'G']}   " Needed by GV
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim', {'on': 'GV'}    " Commit browser
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
     let g:undotree_WindowLayout = 2
@@ -332,6 +331,7 @@ Plug 'sainnhe/gruvbox-material'
         au ColorScheme gruvbox-material hi CurrentWord
                     \ term=underline cterm=underline gui=underline
     aug END
+Plug 'NLKNguyen/papercolor-theme'
 call plug#end()
 else
     echohl WarningMsg
