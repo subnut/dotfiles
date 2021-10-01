@@ -44,6 +44,7 @@ kitty
 libva-mesa-driver
 linux
 linux-firmware
+lsof
 lxappearance-gtk3
 maim
 make
@@ -59,6 +60,7 @@ openbsd-netcat
 opendoas
 openssh
 os-prober
+otf-fira-sans
 otter-browser
 pacman
 patch
@@ -103,6 +105,7 @@ w3m
 wf-recorder
 wl-clipboard
 wpa_supplicant
+wpa_supplicant-runit
 x11-ssh-askpass
 xclip
 xcursor-premium
@@ -118,6 +121,7 @@ xorg-xset
 xorg-xsetroot
 xorg-xwininfo
 xterm
+zathura-cb
 zathura-pdf-mupdf
 zathura-ps
 zsh
