@@ -33,6 +33,28 @@ alias ra=ranger
 alias shrug="echo -n '¯\_(ツ)_/¯' | clipcopy"
 # alias copy=clipcopy
 
+(( ${+commands[abduco]} )) && {
+	function abduco_ {
+		[ $(ps p $(ps p $$ o ppid h) o comm h) = abduco ] && {
+			printf "%s '%s'\n" 'WARNING!!! This shell is already running under abduco session' \
+			$(ps p $(ps p $$ o ppid h) o command h | tr ' ' '\n' | sed -n '/^-c$/,/zsh/{n
+p
+}')
+			echo 'If you somehow accidentally end up attaching to a session from inside that'
+			echo 'session, you will create an infinte loop, inflicting stress on your machine'
+			printf %s 'Are you sure you want to continue? [Y/n] '
+			local ANSWER
+			read ANSWER
+			if [ -z "$ANSWER" ] || echo $ANSWER | grep -q '^[Yy]'; then :;
+			else echo Aborted; return 1;
+			fi
+		}
+		abduco "$@"
+	}
+alias abduco=abduco_
+}
+
+
 my_ssh ()
 {
   (
